@@ -1,9 +1,13 @@
 body {
     font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
 }
 
+/* Nav */
 .nav-bar {
     display: flex;
     gap: 100px;
@@ -35,4 +39,27 @@ body {
 
 .nav-links a:hover {
     color: gray;
+}
+
+/* Board */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+  background-color: purple;
+  width: 800px;
+  height: 800px;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.tile {
+  background-color: black;
 }
