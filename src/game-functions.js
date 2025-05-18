@@ -57,20 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // Populate reds
         for(const [k, v] of Object.entries(redSpawns)){
             const currTile = document.getElementById(coordToTile(v));
-            displayPiece(currTile, k);
+            displayPiece(k, currTile);
         };
         // Populate blues
         for(const [k, v] of Object.entries(blueSpawns)){
             const currTile = document.getElementById(coordToTile(v));
-            displayPiece(currTile, k);
+            displayPiece(k, currTile);
         };
     }
 
     // Create a piece from its name, and display onto a tile
-    function displayPiece(tile, piece){
+    function displayPiece(pieceName, tile){
         const image = document.createElement("img");
-        image.src = `../imgs/pieces/${piece}.png`;
-        image.id = piece;
+        image.src = `../imgs/pieces/${pieceName}.png`;
+        image.id = pieceName;
         tile.appendChild(image);
     }
 
