@@ -50,27 +50,57 @@ main {
 }
 
 #board {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 2px;
-  background-color: black;
-  width: 800px;
-  height: 800px;
-  padding: 2px;
-  box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2px;
+    background-color: black;
+    width: 800px;
+    height: 800px;
+    padding: 2px;
+    box-sizing: border-box;
 }
 
 .tile {
-  background-color: white;
-  position: relative;
+    display: flex;
+    background-color: white;
+    align-items: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.tile > .tile-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  font-size: 20px;
+  white-space: nowrap;
 }
 
 img[id^="r"], img[id^="b"] { /* this will cause problems if other img id starts with r or b. */
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none; /* prevent accidental drag/select */
-  position: absolute;
-  top: 0;
-  left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none; /* prevent accidental drag/select */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.Luck {
+    background-color: rgb(185, 215, 233);
+}
+
+.Risk {
+    background-color: rgb(155, 155, 155);
+}
+
+.Draw {
+    background-color: gold;
+}
+
+.Bank {
+    background-color: rgb(10, 155, 10);
 }

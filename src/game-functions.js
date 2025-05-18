@@ -2,6 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const board = document.getElementById("board");
     const boardSize = 8; // changing this requires changing board styling currently
     const coordToTile = coord => `tile${coord[0]*boardSize+coord[1]}`;
+    const specialTiles = {
+        "Luck": [[0, 7]],
+        "Risk": [[0, 6], [1, 7]],
+        "Draw": [[5, 2]],
+        "Bank": [[7, 0]]
+    }
+    // initial piece states
     const redSpawns = {
         "rBrute": [0, 0],
         "rNumeric1": [0, 1],
@@ -34,7 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Initial board piece states
+    // Set special tiles onto board
+    function setSpecialTiles(){
+        for(const [k, v] of Object.entries(specialTiles)){
+            v.forEach(coord => {
+                const currTile = document.getElementById(coordToTile(coord));
+                currTile.classList.add(k);
+                currTile.innerHTML = `<span class="tile-label">${k}</span>`;
+            });
+        }
+    }
+
+    // Populate board with pieces in their initial locations
     function populateBoard(){
         // Populate reds
         for(const [k, v] of Object.entries(redSpawns)){
@@ -48,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Display a piece onto a tile
+    // Create a piece from its name, and display onto a tile
     function displayPiece(tile, piece){
         const image = document.createElement("img");
         image.src = `../imgs/pieces/${piece}.png`;
@@ -67,5 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     createBoard();
+    setSpecialTiles();
     populateBoard();
 });
