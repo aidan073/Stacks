@@ -25,9 +25,15 @@
             </div>
         </header>
         <main>
-            <div id="board">
+            <div id="game-container">
+                <div id="game-overlay">
+                    <button id="play-button">Play Game</button>
+                </div>
+                <div id="board">
+                </div>
             </div>
         </main>
-        <script src="game-functions.js"></script>
+        <script type="module", src="game-master.js"></script>
+        <script type="module", src="game-logic.js"></script>
     </body>
 </html>

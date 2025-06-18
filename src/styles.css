@@ -41,6 +41,34 @@ body {
     color: gray;
 }
 
+/* Game */
+#game-container {
+  position: relative;
+}
+
+#game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+#play-button {
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  cursor: pointer;
+}
+
+#game-overlay.hidden {
+  display: none;
+}
+
 /* Board */
 main {
     flex: 1;
@@ -84,6 +112,7 @@ img[id^="r"], img[id^="b"] { /* this will cause problems if other img id starts 
     height: 100%;
     object-fit: contain;
     pointer-events: none; /* prevent accidental drag/select */
+    user-select: none;
     position: absolute;
     top: 0;
     left: 0;

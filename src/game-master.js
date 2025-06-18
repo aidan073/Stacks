@@ -1,4 +1,7 @@
+import { handleTileClick, resetBoard } from "./game-logic.js";
+
 document.addEventListener('DOMContentLoaded', () => {
+    let gameState = "off";
     const board = document.getElementById("board");
     const boardSize = 8; // changing this requires changing board styling currently
     const coordToTile = coord => `tile${coord[0]*boardSize+coord[1]}`;
@@ -74,14 +77,20 @@ document.addEventListener('DOMContentLoaded', () => {
         tile.appendChild(image);
     }
 
-    // Handle whenever a tile is clicked
-    function handleTileClick(e, row, column){
-        alert(`You clicked tile ${row}, ${column}`);
-    }
+    // Toggle game between on and off, and perform necessary visual changes
+    function toggleGameState() {
+        const gameContainer = document.getElementById("game-container");
+        const gameOverlay = document.getElementById("game-overlay");
 
-    // Reset board back to initial state
-    function resetBoard(){
-        return;
+        if (gameState === "on") {
+            gameContainer.classList.remove("game-on");
+            gameContainer.classList.add("game-off");
+            gameOverlay.classList.add("hidden");
+        } else {
+            gameContainer.classList.remove("game-off");
+            gameContainer.classList.add("game-on");
+            gameOverlay.classList.remove("hidden");
+        }
     }
 
     createBoard();
