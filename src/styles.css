@@ -46,6 +46,12 @@ body {
   position: relative;
 }
 
+#play-button {
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  cursor: pointer;
+}
+
 #game-overlay {
   position: absolute;
   top: 0;
@@ -57,12 +63,6 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 10;
-}
-
-#play-button {
-  font-size: 2rem;
-  padding: 1rem 2rem;
-  cursor: pointer;
 }
 
 #game-overlay.hidden {

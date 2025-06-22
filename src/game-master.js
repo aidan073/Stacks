@@ -77,21 +77,24 @@ document.addEventListener('DOMContentLoaded', () => {
         tile.appendChild(image);
     }
 
-    // Toggle game between on and off, and perform necessary visual changes
-    function toggleGameState() {
-        const gameContainer = document.getElementById("game-container");
+    // Turn game on or off, and perform necessary logic + visual changes
+    function setGameState(newState) {
         const gameOverlay = document.getElementById("game-overlay");
-
-        if (gameState === "on") {
-            gameContainer.classList.remove("game-on");
-            gameContainer.classList.add("game-off");
-            gameOverlay.classList.add("hidden");
-        } else {
-            gameContainer.classList.remove("game-off");
-            gameContainer.classList.add("game-on");
+        if (newState === "off") {
             gameOverlay.classList.remove("hidden");
+        } else {
+            gameOverlay.classList.add("hidden");
         }
     }
+
+    // When 'Play Game' is selected
+    function onPlayGame(){
+        setGameState("on");
+        console.log("test");
+    }
+
+    let playButton = document.getElementById("play-button");
+    playButton.addEventListener('click', (e) => onPlayGame());
 
     createBoard();
     setSpecialTiles();
