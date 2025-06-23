@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.type = pieceNameToType(pieceName, typeMap);
             this.mover = pieceTypeToMover(this.type);
             this.coord = currCoord;
-            if(pieceName.slice(1) === "r"){
+            if(pieceName[0] === "r"){
                 this.team = "red";
             }
             else{
