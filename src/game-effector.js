@@ -45,8 +45,6 @@ function onDieClick(e, faces, onResult) {
     isRolling = true; // lock when already rolling
 
     let die = e.currentTarget;
-    let result;
-
     die.classList.add('die-rolling');
     die.addEventListener('animationend', function handler() {
         die.classList.remove('die-rolling');
