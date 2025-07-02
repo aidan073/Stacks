@@ -39,9 +39,34 @@ function removePieceFromTile(piece, tile) {
     }
 }
 
+let isRolling = false;
+function onDieClick(e, faces, onResult) {
+    if(isRolling) return;
+    isRolling = true; // lock when already rolling
+
+    let die = e.currentTarget;
+    let result;
+
+    die.classList.add('die-rolling');
+    die.addEventListener('animationend', function handler() {
+        die.classList.remove('die-rolling');
+        const finalNumber = Math.floor(Math.random() * faces);
+        die.textContent = getDieFace(finalNumber);
+        die.removeEventListener('animationend', handler);
+        isRolling = false;
+        onResult(finalNumber+1);
+    });
+}
+
+// Return die face based on number
+function getDieFace(number) {
+    const faces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+    return faces[number];
+}
+
 // Reset board back to initial state
 function resetBoard(){
     return;
 }   
 
-export { handleTileClick, setPieceOnTile, removePieceFromTile, resetBoard };
+export { handleTileClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard };

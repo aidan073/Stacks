@@ -1,8 +1,19 @@
 import { pieceTypeToMover } from "./game-logic.js";
-import { handleTileClick, setPieceOnTile, removePieceFromTile, resetBoard } from "./game-effector.js";
+import { handleTileClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard } from "./game-effector.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    class piece{
+    // Class to store all necessary game state properties
+    class State{
+        constructor(status, reds, blues){
+            this.sixDieVal;
+            this.fourDieVal;
+            this.status = status;
+            this.reds = reds;
+            this.blues = blues;
+        }
+    }
+
+    class Piece{
         constructor(pieceName, currCoord){
             this.name = pieceName;
             this.type = pieceNameToType(pieceName, typeMap);
@@ -16,10 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
-    let gameState = "off";
-    window.onbeforeunload = () => {return gameState === "on" ? '' : undefined}; // prevent user from refreshing an active game.
-
     const redPieces = {};
     const bluePieces = {};
     const board = document.getElementById("board");
@@ -100,14 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateBoard(){
         // Populate reds
         for(const [k, v] of Object.entries(redSpawns)){
-            const thisPiece = new piece(k, v);
+            const thisPiece = new Piece(k, v);
             redPieces[k] = thisPiece;
             const currTile = document.getElementById(coordToTile(v));
             setPieceOnTile(thisPiece, currTile);
         };
         // Populate blues
         for(const [k, v] of Object.entries(blueSpawns)){
-            const thisPiece = new piece(k, v);
+            const thisPiece = new Piece(k, v);
             bluePieces[k] = thisPiece;
             const currTile = document.getElementById(coordToTile(v));
             setPieceOnTile(thisPiece, currTile);
@@ -119,13 +126,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const gameOverlay = document.getElementById("game-overlay");
         if (newState === "off") {
-            gameState = "off";
+            gameState.status = "off";
             gameOverlay.classList.remove("hidden");
         } else {
-            gameState = "on";
+            gameState.status = "on";
             gameOverlay.classList.add("hidden");
         }
     }
+
+    createBoard();
+    setSpecialTiles();
+    populateBoard();
+    let gameState = new State("off", redPieces, bluePieces);
+    window.onbeforeunload = () => {return gameState.gameStatus === "on" ? '' : undefined}; // prevent user from refreshing an active game.
 
     // When 'Play Game' is selected
     function onPlayGame(){
@@ -135,7 +148,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let playButton = document.getElementById("play-button");
     playButton.addEventListener('click', (e) => onPlayGame());
 
-    createBoard();
-    setSpecialTiles();
-    populateBoard();
+    // Die value update callbacks
+    function fourDieUpdate(newVal){
+        gameState.fourDieVal = newVal;
+    }
+    function sixDieUpdate(newVal){
+        gameState.sixDieVal = newVal;
+    }
+    
+    const sixDie = document.getElementById('6die');
+    const fourDie = document.getElementById('4die');
+    sixDie.addEventListener('click', (e) => onDieClick(e, 6, sixDieUpdate));
+    fourDie.addEventListener('click', (e) => onDieClick(e, 4, fourDieUpdate));
+
 });

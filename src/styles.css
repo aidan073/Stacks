@@ -101,7 +101,15 @@ main {
     cursor: pointer;
     box-sizing: content-box;
     background: rgba(228, 10, 10, 0.2);
-    transition: transform 0.5s ease-in-out;
+}
+
+@keyframes roll {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.die-rolling {
+  animation: roll 0.5s ease;
 }
 
 /* Board */
