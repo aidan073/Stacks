@@ -1,4 +1,5 @@
-import { handleTileClick, pieceTypeToMover, resetBoard } from "./game-logic.js";
+import { pieceTypeToMover } from "./game-logic.js";
+import { handleTileClick, setPieceOnTile, removePieceFromTile, resetBoard } from "./game-effector.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     class piece{
@@ -15,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+
+    let gameState = "off";
+    window.onbeforeunload = () => {return gameState === "on" ? '' : undefined}; // prevent user from refreshing an active game.
 
     const redPieces = {};
     const bluePieces = {};
@@ -99,32 +103,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const thisPiece = new piece(k, v);
             redPieces[k] = thisPiece;
             const currTile = document.getElementById(coordToTile(v));
-            displayPiece(thisPiece, currTile);
+            setPieceOnTile(thisPiece, currTile);
         };
         // Populate blues
         for(const [k, v] of Object.entries(blueSpawns)){
             const thisPiece = new piece(k, v);
             bluePieces[k] = thisPiece;
             const currTile = document.getElementById(coordToTile(v));
-            displayPiece(thisPiece, currTile);
+            setPieceOnTile(thisPiece, currTile);
         };
-    }
-
-    // Create a piece from its name, and display onto a tile
-    function displayPiece(piece, tile){
-        const image = document.createElement("img");
-        image.src = `../imgs/pieces/${piece.name}.png`;
-        image.id = piece.name;
-        image.class = "piece-img";
-        tile.appendChild(image);
     }
 
     // Turn game on or off, and perform necessary logic + visual changes
     function setGameState(newState) {
+
         const gameOverlay = document.getElementById("game-overlay");
         if (newState === "off") {
+            gameState = "off";
             gameOverlay.classList.remove("hidden");
         } else {
+            gameState = "on";
             gameOverlay.classList.add("hidden");
         }
     }
