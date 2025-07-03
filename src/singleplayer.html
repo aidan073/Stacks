@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Stacks Singleplayer</title>
+        <title>Stacks</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/common.css">
-        <link rel="stylesheet" href="css/index-styles.css">
+        <link rel="stylesheet" href="css/singleplayer-styles.css">
         <link rel="icon" href="../imgs/Stacks.png" type="image/x-icon">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,11 +26,18 @@
             </div>
         </header>
         <main>
-            <h1>Welcome</h1>
-            <ul class="game-options">
-                <li><a class="option" id="singleplayer-option" href="singleplayer.html">Singleplayer</a></li>
-                <li><a class="option" id="multiplayer-option"><del>>Multiplayer</del></a></li>
-            </ul>
+            <div id="game-container">
+                <div id="game-overlay">
+                    <button type="button" id="play-button">Play Game</button>
+                </div>
+                <div id="board"></div>
+                <div id="dice-container">
+                    <div class="die", id="6die">⚅</div>
+                    <div class="die", id="4die">⚃</div>
+                </div>
+            </div>
         </main>
+        <script type="module", src="./scripts/game-master.js"></script>
+        <script type="module", src="./scripts/game-logic.js"></script>
     </body>
 </html>
