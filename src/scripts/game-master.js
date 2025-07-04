@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setSpecialTiles();
     populateBoard();
     let gameState = new State("off", redPieces, bluePieces);
-    window.onbeforeunload = () => {return gameState.gameStatus === "on" ? '' : undefined}; // prevent user from refreshing an active game.
+    window.onbeforeunload = () => {return gameState.status === "on" ? '' : undefined}; // prevent user from refreshing an active game.
 
     // When 'Play Game' is selected
     function onPlayGame(){

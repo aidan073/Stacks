@@ -1,0 +1,48 @@
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+#welcome-message {
+    background-color: rgba(255, 255, 255, 0);
+    margin-top: 64px;
+    margin-bottom: 0;
+}
+
+#razor-pitch {
+    font-size: 1em;
+    margin-bottom: 64px;
+}
+
+.game-options {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 24px; /* Match overflow size of .option */
+}
+
+.option {
+    font-weight: bold;
+    font-size: 3rem;
+    padding: 0.5em 1.5em;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #222;
+    transition: background 0.2s;
+}
+.option:hover {
+    background-color: #ddd;
+}
+
+#local-option {
+    background-color: #27aae1;
+}
+
+#online-option {
+    background-color: #be1e2d;
+}
