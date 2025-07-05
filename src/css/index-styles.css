@@ -1,3 +1,8 @@
+body{
+    background: #383838;
+    background: linear-gradient(180deg,rgba(39, 170, 225, 1) 0%, rgba(180, 31, 52, 1) 100%);
+}
+
 main {
     display: flex;
     flex-direction: column;
@@ -5,7 +10,6 @@ main {
     justify-content: flex-start;
 }
 #welcome-message {
-    background-color: rgba(255, 255, 255, 0);
     margin-top: 64px;
     margin-bottom: 0;
 }
@@ -27,10 +31,11 @@ main {
 }
 
 .option {
-    font-weight: bold;
+    font-weight: 300;
     font-size: 3rem;
     padding: 0.5em 1.5em;
-    border-radius: 8px;
+    border-radius: 10px;
+    border: 2px solid;
     text-decoration: none;
     color: #222;
     transition: background 0.2s;
@@ -40,9 +45,11 @@ main {
 }
 
 #local-option {
+    border-color: #8eddff;
     background-color: #27aae1;
 }
 
 #online-option {
+    border-color: #ff7886;
     background-color: #be1e2d;
 }

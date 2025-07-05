@@ -82,8 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
         for(let row = 0; row < boardSize; row++){
             for(let column = 0; column < boardSize; column++){
                 const tile = document.createElement("div");
-                tile.className = "tile";
-                tile.id = `tile${boardSize*row+column}`;
+                let tileId = boardSize*row+column;
+                tile.className = `tile ${(tileId+row) % 2 === 0 ? "tEven": "tOdd"}`;
+                tile.id = `tile${tileId}`;
                 tile.dataset.row = row;
                 tile.dataset.column = column;
                 tile.addEventListener('click', (e) => handleTileClick(e, redPieces, bluePieces));

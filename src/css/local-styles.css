@@ -1,3 +1,11 @@
+body{
+    background: hsl(0, 0%, 16%);
+}
+
+.nav-bar {
+    border: none;
+}
+
 /* Main Content */
 main {
     flex: 1;
@@ -28,7 +36,7 @@ main {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.785);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -57,7 +65,7 @@ main {
     height: 1em;
     user-select: none;
     cursor: pointer;
-    background: rgba(228, 10, 10, 0.2);
+    background: rgb(228, 10, 10);
 }
 
 @keyframes roll {
@@ -85,11 +93,18 @@ main {
 .tile {
     display: flex;
     box-sizing: border-box;
-    background-color: white;
     align-items: center;
     position: relative;
     height: 100%;
     width: 100%;
+}
+
+.tile.tEven {
+    background-color: rgb(255, 255, 213);
+}
+
+.tile.tOdd {
+    background-color: rgb(92, 167, 85);
 }
 
 .tile > .tile-label {
@@ -114,18 +129,18 @@ img[id^="r"], img[id^="b"] { /* this will cause problems if other img id starts 
     left: 0;
 }
 
-.Luck {
+.tile.Luck {
     background-color: rgb(185, 215, 233);
 }
 
-.Risk {
+.tile.Risk {
     background-color: rgb(155, 155, 155);
 }
 
-.Draw {
-    background-color: gold;
+.tile.Draw {
+    background-color: rgb(231, 57, 234);
 }
 
-.Bank {
-    background-color: rgb(10, 155, 10);
+.tile.Bank {
+    background-color: gold;
 }

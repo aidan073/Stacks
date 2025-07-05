@@ -11,6 +11,8 @@ body {
 .nav-bar {
     display: flex;
     gap: 100px;
+    border: none;
+    border-bottom: 2px solid #9b9b9b;
     background-color: black;
     font-size: 25px;
     font-weight: 50;
