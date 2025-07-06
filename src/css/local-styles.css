@@ -144,3 +144,15 @@ img[id^="r"], img[id^="b"] { /* this will cause problems if other img id starts 
 .tile.Bank {
     background-color: gold;
 }
+
+/* Text Box */
+#text-box {
+    position: fixed;
+    height: 300px;
+    width: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    top: 50%;
+    left: 32px;
+    transform: translateY(-50%);
+}

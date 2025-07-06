@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Class to store all necessary game state properties
     class State{
         constructor(status, reds, blues){
+            this.turn;
             this.sixDieVal;
             this.fourDieVal;
             this.status = status;
@@ -162,4 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
     sixDie.addEventListener('click', (e) => onDieClick(e, 6, sixDieUpdate));
     fourDie.addEventListener('click', (e) => onDieClick(e, 4, fourDieUpdate));
 
+    // Game loop
+    function startGameplay(){
+        while(gameState.status != "off"){
+            console.log("playing");
+        }
+        return;
+    }
+
+    startGameplay();
 });
