@@ -9,6 +9,7 @@ main {
     align-items: center;
     justify-content: flex-start;
 }
+
 #welcome-message {
     margin-top: 64px;
     margin-bottom: 0;
@@ -40,9 +41,6 @@ main {
     color: #222;
     transition: background 0.2s;
 }
-.option:hover {
-    background-color: #ddd;
-}
 
 #local-option {
     border-color: #8eddff;
@@ -52,4 +50,12 @@ main {
 #online-option {
     border-color: #ff7886;
     background-color: #be1e2d;
+}
+
+#local-option:hover {
+    background-color: #5dbae2;
+}
+
+#online-option:hover {
+    background-color: #d14250;
 }
