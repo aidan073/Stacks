@@ -150,9 +150,28 @@ img[id^="r"], img[id^="b"] { /* this will cause problems if other img id starts 
     position: fixed;
     height: 300px;
     width: 300px;
-    overflow-y: auto;
-    overflow-x: hidden;
     top: 50%;
     left: 32px;
     transform: translateY(-50%);
+}
+
+#turn-announcer {
+    font-size: 2rem;
+    color: white;
+}
+
+#instruction {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    border-radius: 10px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgb(48, 48, 48);
+    background-color: rgb(68, 68, 68);
+    margin-top: 32px;
+    font-size: 1.5rem;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
