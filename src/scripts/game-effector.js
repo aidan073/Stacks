@@ -49,7 +49,7 @@ function onDieClick(e, faces, onResult) {
     die.addEventListener('animationend', function handler() {
         die.classList.remove('die-rolling');
         const finalNumber = Math.floor(Math.random() * faces);
-        die.textContent = getDieFace(finalNumber);
+        die.src = getDieFace(finalNumber);
         die.removeEventListener('animationend', handler);
         isRolling = false;
         onResult(finalNumber+1);
@@ -58,8 +58,8 @@ function onDieClick(e, faces, onResult) {
 
 // Return die face based on number
 function getDieFace(number) {
-    const faces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
-    return faces[number];
+    const faces = ['one', 'two', 'three', 'four', 'five', 'six'];
+    return `../imgs/dice/dice-six-faces-${faces[number]}.png`;
 }
 
 // Reset board back to initial state
