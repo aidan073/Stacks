@@ -27,7 +27,3 @@ function ghostMover(piece){
 }
 
 export { pieceTypeToMover };
-
-document.addEventListener('DOMContentLoaded', () => {
-    const board = document.getElementById("board");
-});
