@@ -1,4 +1,4 @@
-import { pieceTypeToMover } from "./game-logic.js";
+import { numericMover, bruteMover, ghostMover } from "./game-logic.js";
 import { handleTileClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard } from "./game-effector.js";
 
 let gameState;
@@ -20,16 +20,32 @@ class State{
 
 class Piece{
     constructor(pieceName, currCoord){
+        this.mover;
         this.name = pieceName;
-        this.type = pieceNameToType(pieceName, typeMap);
-        this.mover = pieceTypeToMover(this.type);
         this.coord = currCoord;
-        if(pieceName[0] === "r"){
-            this.team = "red";
-        }
-        else{
-            this.team = "blue";
-        }
+        this.team = pieceName[0] === "r" ? "red" : "blue";
+    }
+}
+
+class Numeric extends Piece{
+    constructor(pieceName, currCoord, value){
+        super(pieceName, currCoord);
+        this.mover = numericMover;
+        this.value = value;
+    }
+}
+
+class Ghost extends Piece{
+    constructor(pieceName, currCoord){
+        super(pieceName, currCoord);
+        this.mover = ghostMover;
+    }
+}
+
+class Brute extends Piece{
+    constructor(pieceName, currCoord){
+        super(pieceName, currCoord);
+        this.mover = bruteMover;
     }
 }
 
@@ -56,29 +72,9 @@ const blueSpawns = {
     "bNumeric4": [3, 7],
     "bGhost": [2, 7]
 }
-const typeMap = {
-    "Brute": "brute",
-    "Numeric1": "num1",
-    "Numeric2": "num2",
-    "Numeric3": "num3",
-    "Numeric4": "num4",
-    "Ghost": "ghost"
-};
 
 // Convert [x,y] coord to tile id
 const coordToTile = coord => `tile${coord[0]*boardSize+coord[1]}`;
-
-// Convert piece name to piece type
-function pieceNameToType(pieceName, typeMap) {
-    // Strip the team prefix
-    const baseName = pieceName.slice(1);
-    const pieceType = typeMap[baseName];
-
-    if (!pieceType) {
-        throw new Error(`Piece with name: "${baseName}" does not exist in typeMap`);
-    }
-    return pieceType;
-}
 
 // Create tiles
 function createBoard(){
@@ -107,18 +103,30 @@ function setSpecialTiles(){
     }
 }
 
+// Convert the name (see redSpawns, blueSpawns) of a piece to an actual Piece object
+function pieceNameToPiece(pieceName, currCoord){
+    switch(pieceName[1]){
+        case "G":
+            return new Ghost(pieceName, currCoord);
+        case "B":
+            return new Brute(pieceName, currCoord);
+        case "N":
+            return new Numeric(pieceName, currCoord, parseInt(pieceName[-1]));
+    }
+}
+
 // Populate board with pieces in their initial locations
 function populateBoard(){
     // Populate reds
     for(const [k, v] of Object.entries(redSpawns)){
-        const thisPiece = new Piece(k, v);
+        const thisPiece = pieceNameToPiece(k, v);
         redPieces[k] = thisPiece;
         const currTile = document.getElementById(coordToTile(v));
         setPieceOnTile(thisPiece, currTile);
     };
     // Populate blues
     for(const [k, v] of Object.entries(blueSpawns)){
-        const thisPiece = new Piece(k, v);
+        const thisPiece = pieceNameToPiece(k, v);
         bluePieces[k] = thisPiece;
         const currTile = document.getElementById(coordToTile(v));
         setPieceOnTile(thisPiece, currTile);
@@ -148,11 +156,11 @@ function setGameState(newState) {
 // When 'Play Game' is selected
 function onPlayGame(){
     setGameState("on");
-    startGameplay();
+    gameState.turn = Math.random() >= 0.5 ? "red" : "blue"; // The starting player will actually be the opposite of this outcome.
+    gameLoop();
 }
 
-// Game loop
-function startGameplay(){
+function gameLoop(){
     if(gameState.status !== "on"){
         console.log("hello");
     }
