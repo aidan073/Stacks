@@ -1,6 +1,6 @@
 import { coordToTile } from "./utils.js"
 import { numericMover, bruteMover, ghostMover } from "./game-logic.js";
-import { handleTileClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollDie, movePiece } from "./game-effector.js";
+import { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollDie, movePiece } from "./game-effector.js";
 
 const redPieces = {};
 const bluePieces = {};
@@ -25,6 +25,7 @@ export default gameState;
 class Piece{
     constructor(pieceName, currCoord){
         this.mover;
+        this.clickHandler;
         this.name = pieceName;
         this.coord = currCoord;
         this.team = pieceName[0] === "r" ? "red" : "blue";
@@ -122,14 +123,18 @@ function populateBoard(){
         const thisPiece = pieceNameToPiece(k, v);
         redPieces[k] = thisPiece;
         const currTile = document.getElementById(coordToTile(v));
-        setPieceOnTile(thisPiece, currTile);
+        const htmlPieceId = setPieceOnTile(thisPiece, currTile);
+        thisPiece.clickHandler = () => handlePieceClick(thisPiece);
+        document.getElementById(htmlPieceId).addEventListener('click', thisPiece.clickHandler);
     };
     // Populate blues
     for(const [k, v] of Object.entries(blueSpawns)){
         const thisPiece = pieceNameToPiece(k, v);
         bluePieces[k] = thisPiece;
         const currTile = document.getElementById(coordToTile(v));
-        setPieceOnTile(thisPiece, currTile);
+        const htmlPieceId = setPieceOnTile(thisPiece, currTile);
+        thisPiece.clickHandler = () => handlePieceClick(thisPiece);
+        document.getElementById(htmlPieceId).addEventListener('click', thisPiece.clickHandler);
     };
 }
 
@@ -140,8 +145,6 @@ function fourDieUpdate(newVal){
 function sixDieUpdate(newVal){
     gameState.sixDieVal = newVal;
 }
-
-// 
 
 // Turn game on or off, and perform necessary logic + visual changes
 function setGameState(newState) {

@@ -1,10 +1,8 @@
 import gameState from "./game-master.js";
-import { coordToTile } from "./utils.js";
 // Functions that affect the game state as it is being played
 
-// Handle whenever a tile is clicked
-function handleTileClick(piece){
-    if(gameState.activity !== "moving") return;
+function handlePieceClick(piece){
+    if(gameState.activity !== "moving" || piece.team !== gameState.turn) return;
     piece.mover(gameState);
 }
 
@@ -16,6 +14,7 @@ function setPieceOnTile(piece, tile){
     image.id = piece.name;
     image.class = "piece-img";
     tile.appendChild(image);
+    return image.id;
 }
 
 // Remove a piece from a tile
@@ -46,7 +45,7 @@ function onDieClick(e, faces, onResult) {
     });
 }
 
-// Return die face based on number
+// Return die face based on input index
 function getDieFace(number) {
     const faces = ['one', 'two', 'three', 'four', 'five', 'six'];
     return `../imgs/dice/dice-six-faces-${faces[number]}.png`;
@@ -62,17 +61,10 @@ function toggleTurn(){
     if(gameState.turn === "red"){
         gameState.turn = "blue";
         document.getElementById("turn-announcer").innerHTML = `<span id=blue-turn-text>Blue's</span> turn.`;
-        for(const piece of Object.values(gameState.blues)){
-            document.getElementById(coordToTile(piece.coord)).addEventListener('click', () => handleTileClick(piece));
-        }
-        // make sure to destroy listeners after
     }
     else{
         gameState.turn = "red";
         document.getElementById("turn-announcer").innerHTML = `<span id=red-turn-text>Red's</span> turn.`;
-        for(const piece of Object.values(gameState.reds)){
-            document.getElementById(coordToTile(piece.coord)).addEventListener('click', () => handleTileClick(piece));
-        }
     }
 }
 
@@ -84,4 +76,4 @@ function movePiece(){
     gameState.activity = "moving";
 }
 
-export { handleTileClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollDie, movePiece };
+export { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollDie, movePiece };

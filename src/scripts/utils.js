@@ -18,4 +18,4 @@ function manhattan(rootCoord, roll, conditionalCallback, optionTag){
     }
 }
 
-export { coordToTile, manhattan}
+export { coordToTile, manhattan }
