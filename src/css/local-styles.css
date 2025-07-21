@@ -182,7 +182,7 @@ main {
   left: 50%;
   width: 30px;
   height: 30px;
-  background-color: #e1272781;
+  background-color: #cc171781;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -196,7 +196,7 @@ main {
   left: 50%;
   width: 30px;
   height: 30px;
-  background-color: #27a9e181;
+  background-color: #1c87b481;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -227,7 +227,7 @@ img[id^="b"] {
 }
 
 .tile.Luck {
-  background-color: #5fd1f3;
+  background-color: #7bd4f0;
 }
 
 .tile.Risk {

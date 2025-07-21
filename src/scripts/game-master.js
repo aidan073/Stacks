@@ -1,6 +1,6 @@
 import { coordToTile } from "./utils.js"
 import { numericMover, bruteMover, ghostMover } from "./game-logic.js";
-import { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollDie, movePiece } from "./game-effector.js";
+import { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollFourDie, movePiece } from "./game-effector.js";
 
 const redPieces = {};
 const bluePieces = {};
@@ -10,7 +10,7 @@ window.boardSize = 8;
 class State{
     constructor(status, reds, blues){
         this.turn;
-        this.activity; // rolling, moving, 
+        this.activity; // waiting, rolling, moving, 
         this.sixDieVal;
         this.fourDieVal;
         this.status = status;
@@ -138,14 +138,6 @@ function populateBoard(){
     };
 }
 
-// Die value update callbacks
-function fourDieUpdate(newVal){
-    gameState.fourDieVal = newVal;
-}
-function sixDieUpdate(newVal){
-    gameState.sixDieVal = newVal;
-}
-
 // Turn game on or off, and perform necessary logic + visual changes
 function setGameState(newState) {
     const gameOverlay = document.getElementById("game-overlay");
@@ -168,7 +160,7 @@ function onPlayGame(){
 async function gameLoop(){
     while(gameState.status != "off"){
         toggleTurn();
-        rollDie();
+        await rollFourDie();
         movePiece();
         break;
     }
@@ -176,12 +168,6 @@ async function gameLoop(){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Dice
-    const sixDie = document.getElementById('6die');
-    const fourDie = document.getElementById('4die');
-    sixDie.addEventListener('click', (e) => onDieClick(e, 6, sixDieUpdate));
-    fourDie.addEventListener('click', (e) => onDieClick(e, 4, fourDieUpdate));
-
     // Game initialization
     createBoard();
     setSpecialTiles();

@@ -9,8 +9,7 @@ function bruteMover(gameState){
 }
 function ghostMover(gameState) {
     const rootCoord = this.coord;
-    // const roll = gameState.fourDieVal;
-    const roll = 3;
+    const roll = gameState.fourDieVal;
     const optionTag = gameState.turn === "red" ? "optionR" : "optionB";
     manhattan(rootCoord, roll, ghostMoverCallback, optionTag);
 }

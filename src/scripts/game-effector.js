@@ -28,20 +28,25 @@ function removePieceFromTile(piece, tile) {
     }
 }
 
-let isRolling = false;
-function onDieClick(e, faces, onResult) {
-    if(isRolling || gameState.activity !== "rolling") return;
-    isRolling = true; // lock when already rolling
+// Die value update callbacks
+function fourDieUpdate(newVal){
+    gameState.fourDieVal = newVal;
+}
+function sixDieUpdate(newVal){
+    gameState.sixDieVal = newVal;
+}
 
-    let die = e.currentTarget;
-    die.classList.add('die-rolling');
-    die.addEventListener('animationend', function handler() {
-        die.classList.remove('die-rolling');
-        const finalNumber = Math.floor(Math.random() * faces);
-        die.src = getDieFace(finalNumber);
-        die.removeEventListener('animationend', handler);
-        isRolling = false;
-        onResult(finalNumber+1);
+function onDieClick(e, faces, onResult) {
+    const die = e.currentTarget;
+    return new Promise((resolve) => {
+        die.classList.add('die-rolling');
+        die.addEventListener('animationend', function handler() {
+            die.classList.remove('die-rolling');
+            const finalNumber = Math.floor(Math.random() * faces);
+            die.src = getDieFace(finalNumber);
+            onResult(finalNumber+1);
+            resolve();
+        }, {once: true});
     });
 }
 
@@ -68,12 +73,22 @@ function toggleTurn(){
     }
 }
 
-function rollDie(){
+async function rollFourDie() {
     gameState.activity = "rolling";
+    document.getElementById("instruction").innerText = "Please roll the 4 sided die.";
+
+    const die = document.getElementById('4die');
+    const faces = 4;
+    await new Promise((resolve) => {
+        die.addEventListener('click', async function handler(e) {
+            await onDieClick(e, faces, fourDieUpdate);
+            resolve();
+        }, {once: true});
+    });
 }
 
 function movePiece(){
     gameState.activity = "moving";
 }
 
-export { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollDie, movePiece };
+export { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollFourDie, movePiece };

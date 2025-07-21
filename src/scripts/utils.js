@@ -1,5 +1,8 @@
 // Convert [x,y] coord to tile id
-const coordToTile = coord => `tile${coord[0]*window.boardSize+coord[1]}`;
+const coordToTile = coord => {
+    if(coord[0] >= window.boardSize || coord[1] >= window.boardSize) return;
+    return `tile${coord[0]*window.boardSize+coord[1]}`;
+}
 
 function manhattan(rootCoord, roll, conditionalCallback, optionTag){
     for(let dx = -roll; dx <= roll; dx++) {
