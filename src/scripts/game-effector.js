@@ -89,6 +89,7 @@ async function rollFourDie() {
 
 function movePiece(){
     gameState.activity = "moving";
+    // TODO: Make sure after moving a piece, that piece.isSelected is set to false.
 }
 
 export { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollFourDie, movePiece };

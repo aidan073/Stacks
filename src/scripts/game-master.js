@@ -28,6 +28,7 @@ class Piece{
         this.clickHandler;
         this.name = pieceName;
         this.coord = currCoord;
+        this.isSelected = false;
         this.team = pieceName[0] === "r" ? "red" : "blue";
     }
 }

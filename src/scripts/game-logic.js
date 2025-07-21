@@ -1,4 +1,4 @@
-import { manhattan } from "./utils.js";
+import { manhattan, clearDots } from "./utils.js";
 
 // Movers
 function numericMover(gameState){
@@ -8,9 +8,15 @@ function bruteMover(gameState){
     return;
 }
 function ghostMover(gameState) {
+    const optionTag = gameState.turn === "red" ? "optionR" : "optionB";
+    if(this.isSelected){
+        clearDots(optionTag);
+        this.isSelected = false;
+        return;
+    }
+    this.isSelected = true;
     const rootCoord = this.coord;
     const roll = gameState.fourDieVal;
-    const optionTag = gameState.turn === "red" ? "optionR" : "optionB";
     manhattan(rootCoord, roll, ghostMoverCallback, optionTag);
 }
 function ghostMoverCallback(currTile){

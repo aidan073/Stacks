@@ -4,6 +4,13 @@ const coordToTile = coord => {
     return `tile${coord[0]*window.boardSize+coord[1]}`;
 }
 
+function clearDots(optionTag){
+    const tiles = document.getElementById("board").children;
+    for(const tile of tiles){
+        tile.classList.remove(optionTag);
+    }
+}
+
 function manhattan(rootCoord, roll, conditionalCallback, optionTag){
     for(let dx = -roll; dx <= roll; dx++) {
         for(let dy = -roll; dy <= roll; dy++) {
@@ -21,4 +28,4 @@ function manhattan(rootCoord, roll, conditionalCallback, optionTag){
     }
 }
 
-export { coordToTile, manhattan }
+export { coordToTile, clearDots, manhattan }
