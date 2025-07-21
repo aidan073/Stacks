@@ -1,6 +1,4 @@
-import { coordToTile } from "./utils.js";
-
-const board = document.getElementById("board");
+import { manhattan } from "./utils.js";
 
 // Movers
 function numericMover(gameState){
@@ -13,21 +11,11 @@ function ghostMover(gameState) {
     const rootCoord = this.coord;
     const roll = gameState.fourDieVal;
     const optionTag = gameState.turn === "red" ? "optionR" : "optionB";
-
-    for(let dx = -roll; dx <= roll; dx++) {
-        for(let dy = -roll; dy <= roll; dy++) {
-            const distance = Math.abs(dx) + Math.abs(dy);
-            if(distance <= roll) {
-                const targetX = rootCoord[0] + dx;
-                const targetY = rootCoord[1] + dy;
-                const tileId = coordToTile([targetX, targetY]);
-                const currTile = document.getElementById(tileId);
-                if(currTile) {
-                    currTile.classList.add(optionTag);
-                }
-            }
-        }
-    }
+    manhattan(rootCoord, roll, optionTag, ghostMoverCallback);
+}
+function ghostMoverCallback(currTile){
+    if(!currTile) return false;
+    return true;
 }
 
 export { numericMover, bruteMover, ghostMover };
