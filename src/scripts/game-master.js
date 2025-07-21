@@ -1,7 +1,6 @@
 import { numericMover, bruteMover, ghostMover } from "./game-logic.js";
 import { handleTileClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard } from "./game-effector.js";
 
-let gameState;
 const redPieces = {};
 const bluePieces = {};
 const boardSize = 8;
@@ -17,6 +16,9 @@ class State{
         this.blues = blues;
     }
 }
+
+const gameState = new State("off", undefined, undefined);
+export default gameState;
 
 class Piece{
     constructor(pieceName, currCoord){
@@ -184,7 +186,8 @@ document.addEventListener('DOMContentLoaded', () => {
     createBoard();
     setSpecialTiles();
     populateBoard();
-    gameState = new State("off", redPieces, bluePieces);
+    gameState.reds = redPieces;
+    gameState.blues = bluePieces;
     window.onbeforeunload = () => {return gameState.status === "on" ? '' : undefined}; // prevent user from refreshing an active game.
 
     // Play button

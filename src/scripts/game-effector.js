@@ -1,3 +1,4 @@
+import gameState from "./game-master.js";
 // Functions that affect the game state as it is being played
 
 // Handle whenever a tile is clicked
@@ -41,7 +42,7 @@ function removePieceFromTile(piece, tile) {
 
 let isRolling = false;
 function onDieClick(e, faces, onResult) {
-    if(isRolling) return;
+    if(isRolling || gameState.status === "off") return;
     isRolling = true; // lock when already rolling
 
     let die = e.currentTarget;

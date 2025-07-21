@@ -1,83 +1,141 @@
-body{
-    background: rgb(41, 41, 41);
+body {
+  background: linear-gradient(to bottom, #141e30, #243b55);
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #fff;
 }
 
-.nav-bar {
-    border: none;
-}
-
-/* Main Content */
 main {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 100px);
+  position: relative;
 }
 
-/* Game */
+/* Game Container */
 #game-container {
-    position: relative;
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  gap: 60px;
 }
 
-#play-button {
-    font-size: 2rem;
-    padding: 1rem 2rem;
-    cursor: pointer;
-}
-
+/* Overlay */
 #game-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.785);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
 }
 
 #game-overlay.hidden {
-    display: none;
+  display: none;
 }
 
-/* Die */
+#play-button {
+  font-size: 2rem;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(90deg, #27aae1, #8eddff);
+  border: none;
+  border-radius: 12px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 0 12px #27aae1aa;
+}
+
+#play-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #27aae1;
+}
+
+/* Text Box */
+#text-box {
+  position: absolute;
+  left: -470px;
+  top: 45%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 360px;
+  gap: 30px;
+}
+
+#turn-announcer {
+  font-size: 2.2rem;
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  color: #ffffff;
+}
+
+#instruction {
+  width: 100%;
+  height: 120px;
+  border-radius: 12px;
+  background: #2e2e2e;
+  border: 2px solid #666;
+  font-size: 1.4rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ddd;
+}
+
+/* Dice */
 #dice-container {
-    position: absolute;
-    top: 50%;
-    left: calc(50% + 470px);
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 40px;
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 20px);
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
 }
 
 .die {
-    border-radius: 10px;
-    align-items: center;
-    justify-content: center;
-    width: 100px;
-    height: 100px;
-    user-select: none;
-    cursor: pointer;
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  cursor: pointer;
+  background-color: #1e1e1e;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+  transition: transform 0.2s, box-shadow 0.3s;
 }
 
-@keyframes roll {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.die:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
 }
 
 .die-rolling {
   animation: roll 0.5s ease;
 }
 
-/* Board */
+@keyframes roll {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Game Board */
 #board {
   display: grid;
   grid-template-columns: repeat(8, 90px);
@@ -91,20 +149,20 @@ main {
 }
 
 .tile {
-    display: flex;
-    box-sizing: border-box;
-    align-items: center;
-    position: relative;
-    height: 100%;
-    width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  position: relative;
+  height: 100%;
+  width: 100%;
 }
 
 .tile.tEven {
-    background-color: rgb(255, 255, 213);
+  background-color: #fffdd5;
 }
 
 .tile.tOdd {
-    background-color: rgb(92, 167, 85);
+  background-color: #5ca755;
 }
 
 .tile > .tile-label {
@@ -117,66 +175,31 @@ main {
   white-space: nowrap;
 }
 
-img[id^="r"], img[id^="b"] { /* this will cause problems if other img id starts with r or b. */
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    object-fit: contain;
-    cursor: pointer;
-    user-select: none;
-    position: absolute;
-    top: 0;
-    left: 0;
+img[id^="r"],
+img[id^="b"] {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  object-fit: contain;
+  cursor: pointer;
+  user-select: none;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .tile.Luck {
-    background-color: rgb(185, 215, 233);
+  background-color: #38bdf8;
 }
 
 .tile.Risk {
-    background-color: rgb(155, 155, 155);
+  background-color: #fd8a38;
 }
 
 .tile.Draw {
-    background-color: rgb(231, 57, 234);
+  background-color: #c084fc;
 }
 
 .tile.Bank {
-    background-color: gold;
-}
-
-/* Text Box */
-#text-box {
-    position: absolute;
-    left: calc(-350px + -120px);
-    top: 45%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 300px;
-    width: 350px;
-}
-
-#turn-announcer {
-    font-size: 2rem;
-    color: white;
-}
-
-#instruction {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 350px;
-    border-radius: 10px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: rgb(48, 48, 48);
-    background-color: rgb(68, 68, 68);
-    margin-top: 32px;
-    font-size: 1.5rem;
-    padding: 0 10px;
-    box-sizing: border-box;
+  background-color: #facc15;
 }
