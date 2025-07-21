@@ -1,14 +1,16 @@
+import { coordToTile } from "./utils.js"
 import { numericMover, bruteMover, ghostMover } from "./game-logic.js";
-import { handleTileClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard } from "./game-effector.js";
+import { handleTileClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollDie, movePiece } from "./game-effector.js";
 
 const redPieces = {};
 const bluePieces = {};
-const boardSize = 8;
+window.boardSize = 8;
 
 // Class to store all necessary game state properties
 class State{
     constructor(status, reds, blues){
         this.turn;
+        this.activity; // rolling, moving, 
         this.sixDieVal;
         this.fourDieVal;
         this.status = status;
@@ -75,20 +77,16 @@ const blueSpawns = {
     "bGhost": [2, 7]
 }
 
-// Convert [x,y] coord to tile id
-const coordToTile = coord => `tile${coord[0]*boardSize+coord[1]}`;
-
 // Create tiles
 function createBoard(){
-    for(let row = 0; row < boardSize; row++){
-        for(let column = 0; column < boardSize; column++){
+    for(let row = 0; row < window.boardSize; row++){
+        for(let column = 0; column < window.boardSize; column++){
             const tile = document.createElement("div");
-            let tileId = boardSize*row+column;
+            let tileId = window.boardSize*row+column;
             tile.className = `tile ${(tileId+row) % 2 === 0 ? "tEven": "tOdd"}`;
             tile.id = `tile${tileId}`;
             tile.dataset.row = row;
             tile.dataset.column = column;
-            tile.addEventListener('click', (e) => handleTileClick(e, redPieces, bluePieces));
             board.appendChild(tile);
         }
     }
@@ -143,6 +141,8 @@ function sixDieUpdate(newVal){
     gameState.sixDieVal = newVal;
 }
 
+// 
+
 // Turn game on or off, and perform necessary logic + visual changes
 function setGameState(newState) {
     const gameOverlay = document.getElementById("game-overlay");
@@ -162,16 +162,13 @@ function onPlayGame(){
     gameLoop();
 }
 
-function gameLoop(){
-    if(gameState.status !== "on"){
-        console.log("hello");
+async function gameLoop(){
+    while(gameState.status != "off"){
+        toggleTurn();
+        rollDie();
+        movePiece();
+        break;
     }
-    else{
-        console.log("no hello");
-    }
-    // while(gameState.status != "off"){
-    //     continue;
-    // }
     return;
 }
 

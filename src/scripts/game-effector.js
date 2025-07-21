@@ -1,22 +1,11 @@
 import gameState from "./game-master.js";
+import { coordToTile } from "./utils.js";
 // Functions that affect the game state as it is being played
 
 // Handle whenever a tile is clicked
-function handleTileClick(e, reds, blues){
-    const tile = e.currentTarget;
-    if(!tile.classList.contains("has-piece")){
-        return;
-    }
-    // tile contains a piece
-    let piece;
-    const pieceName = tile.firstElementChild.id;
-    if(reds[pieceName]){
-        piece = reds[pieceName];
-    }
-    else{
-        piece = blues[pieceName];
-    }
-    alert(`You clicked tile ${tile.dataset.row}, ${tile.dataset.column}. It contains: ${piece.type} for team ${piece.team}`);
+function handleTileClick(piece){
+    if(gameState.activity !== "moving") return;
+    piece.mover(gameState);
 }
 
 // Place a piece onto a tile
@@ -42,7 +31,7 @@ function removePieceFromTile(piece, tile) {
 
 let isRolling = false;
 function onDieClick(e, faces, onResult) {
-    if(isRolling || gameState.status === "off") return;
+    if(isRolling || gameState.activity !== "rolling") return;
     isRolling = true; // lock when already rolling
 
     let die = e.currentTarget;
@@ -68,4 +57,31 @@ function resetBoard(){
     return;
 }   
 
-export { handleTileClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard };
+// Turn flow functions
+function toggleTurn(){
+    if(gameState.turn === "red"){
+        gameState.turn = "blue";
+        document.getElementById("turn-announcer").innerHTML = `<span id=blue-turn-text>Blue's</span> turn.`;
+        for(const piece of Object.values(gameState.blues)){
+            document.getElementById(coordToTile(piece.coord)).addEventListener('click', () => handleTileClick(piece));
+        }
+        // make sure to destroy listeners after
+    }
+    else{
+        gameState.turn = "red";
+        document.getElementById("turn-announcer").innerHTML = `<span id=red-turn-text>Red's</span> turn.`;
+        for(const piece of Object.values(gameState.reds)){
+            document.getElementById(coordToTile(piece.coord)).addEventListener('click', () => handleTileClick(piece));
+        }
+    }
+}
+
+function rollDie(){
+    gameState.activity = "rolling";
+}
+
+function movePiece(){
+    gameState.activity = "moving";
+}
+
+export { handleTileClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollDie, movePiece };
