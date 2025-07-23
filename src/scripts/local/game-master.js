@@ -1,5 +1,4 @@
-import { coordToTile } from "./utils.js"
-import { numericMover, bruteMover, ghostMover } from "./game-logic.js";
+import { coordToTile, pieceNameToPiece } from "./game-utils.js"
 import { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollFourDie, movePiece } from "./game-effector.js";
 
 const redPieces = {};
@@ -21,39 +20,6 @@ class State{
 
 const gameState = new State("off", undefined, undefined);
 export default gameState;
-
-class Piece{
-    constructor(pieceName, currCoord){
-        this.mover;
-        this.clickHandler;
-        this.name = pieceName;
-        this.coord = currCoord;
-        this.isSelected = false;
-        this.team = pieceName[0] === "r" ? "red" : "blue";
-    }
-}
-
-class Numeric extends Piece{
-    constructor(pieceName, currCoord, value){
-        super(pieceName, currCoord);
-        this.mover = numericMover;
-        this.value = value;
-    }
-}
-
-class Ghost extends Piece{
-    constructor(pieceName, currCoord){
-        super(pieceName, currCoord);
-        this.mover = ghostMover;
-    }
-}
-
-class Brute extends Piece{
-    constructor(pieceName, currCoord){
-        super(pieceName, currCoord);
-        this.mover = bruteMover;
-    }
-}
 
 // Spawn mappings
 const specialTiles = {
@@ -102,18 +68,6 @@ function setSpecialTiles(){
             currTile.classList.add(k);
             currTile.innerHTML = `<span class="tile-label">${k}</span>`;
         });
-    }
-}
-
-// Convert the name (see redSpawns, blueSpawns) of a piece to an actual Piece object
-function pieceNameToPiece(pieceName, currCoord){
-    switch(pieceName[1]){
-        case "G":
-            return new Ghost(pieceName, currCoord);
-        case "B":
-            return new Brute(pieceName, currCoord);
-        case "N":
-            return new Numeric(pieceName, currCoord, parseInt(pieceName[-1]));
     }
 }
 

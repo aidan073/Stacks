@@ -1,4 +1,5 @@
 import gameState from "./game-master.js";
+import { tileToPiece } from "./game-utils.js";
 // Functions that affect the game state as it is being played
 
 function handlePieceClick(piece){
@@ -8,6 +9,7 @@ function handlePieceClick(piece){
 
 // Place a piece onto a tile
 function setPieceOnTile(piece, tile){
+    tileToPiece[tile] = piece;
     tile.classList.add('has-piece');
     const image = document.createElement("img");
     image.src = `../imgs/pieces/${piece.name}.png`;
@@ -19,6 +21,7 @@ function setPieceOnTile(piece, tile){
 
 // Remove a piece from a tile
 function removePieceFromTile(piece, tile) {
+    delete tileToPiece.tile;
     const pieceImg = tile.querySelector(`#${piece.name}`);
     if(pieceImg) {
         pieceImg.remove();
