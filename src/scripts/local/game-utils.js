@@ -17,7 +17,7 @@ function pieceNameToPiece(pieceName, currCoord){
         case "B":
             return new Brute(pieceName, currCoord);
         case "N":
-            return new Numeric(pieceName, currCoord, parseInt(pieceName[-1]));
+            return new Numeric(pieceName, currCoord, parseInt(pieceName[pieceName.length-1]));
     }
 }
 
@@ -26,6 +26,7 @@ function clearDots(currPlayer){
     const tiles = document.getElementById("board").children;
     for(const tile of tiles){
         tile.classList.remove(`${currPlayer}-dot`);
+        tile.classList.remove(`${currPlayer}-capture`);
     }
 }
 

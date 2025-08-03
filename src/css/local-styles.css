@@ -202,6 +202,44 @@ main {
   pointer-events: none;
 }
 
+.tile.red-capture::after,
+.tile.blue-capture::after {
+  content: "🗡️";
+  font-size: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tile.red-capture::after {
+  animation: redGlowPulse 1.2s infinite ease-in-out;
+}
+
+.tile.blue-capture::after {
+  animation: blueGlowPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes redGlowPulse {
+  0%, 100% {
+    text-shadow: 0 0 4px rgba(255, 0, 0, 0.3), 0 0 8px rgba(255, 0, 0, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.7), 0 0 20px rgba(255, 0, 0, 0.9);
+  }
+}
+
+@keyframes blueGlowPulse {
+  0%, 100% {
+    text-shadow: 0 0 4px rgba(0, 0, 255, 0.3), 0 0 8px rgba(0, 0, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(0, 0, 255, 0.7), 0 0 20px rgba(0, 0, 255, 0.9);
+  }
+}
+
 .tile > .tile-label {
   z-index: 1;
   position: absolute;

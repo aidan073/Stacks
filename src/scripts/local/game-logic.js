@@ -23,10 +23,9 @@ function findValidMoves(startCoord, roll, conditionalCallback, currPlayer) {
             const currCoord = queue.shift();
             const currTile = document.getElementById(coordToTileName(currCoord));
             const moveCondition = conditionalCallback(currTile, currPlayer);
-            console.log({ currTile, moveCondition });
             switch(moveCondition) {
                 case 1:
-                    currTile.classList.add("capture");
+                    currTile.classList.add(`${currPlayer}-capture`);
                     break;
                 case 0:
                     currTile.classList.add(`${currPlayer}-dot`);
@@ -46,6 +45,7 @@ function findValidMoves(startCoord, roll, conditionalCallback, currPlayer) {
         roll--;
     }
 }
+
 function mover(gameState) {
     if(this.isSelected){
         clearDots(gameState.turn);
@@ -55,31 +55,31 @@ function mover(gameState) {
     this.isSelected = true;
     const rootCoord = this.coord;
     const roll = gameState.fourDieVal;
-    findValidMoves(rootCoord, roll, this.moveConditions, gameState.turn);
+    findValidMoves(rootCoord, roll, this.moveConditions.bind(this), gameState.turn);
 }
 
+//TODO: SHOULDN'T BE ABLE TO TAKE PIECE IN SPAWN
 // Move conditionals:
 // -1 = can't, 0 = can, 1 = capture
-
-//TODO
 function numericMoveConditions(currTile, currPlayer){
     if(!currTile) return -1;
-    const potentialPiece = tileToPiece[currTile];
-    if(potentialPiece instanceof Brute && potentialPiece.team !== currPlayer) return 1;
-    return 0;
+    const potentialPiece = tileToPiece[currTile.id];
+    if(!potentialPiece || potentialPiece instanceof Ghost) return 0;
+    if(potentialPiece instanceof Numeric && potentialPiece.team !== currPlayer && this.value > potentialPiece.value) return 1;
+    return -1;
 }
 
-//TODO
 function bruteMoveConditions(currTile, currPlayer){
     if(!currTile) return -1;
-    const potentialPiece = tileToPiece[currTile];
-    if(potentialPiece instanceof Brute && potentialPiece.team !== currPlayer) return 1;
-    return 0;
+    const potentialPiece = tileToPiece[currTile.id];
+    if(!potentialPiece) return 0;
+    if(potentialPiece instanceof Numeric && potentialPiece.team !== currPlayer) return 1;
+    return -1;
 }
 
 function ghostMoveConditions(currTile, currPlayer){
     if(!currTile) return -1;
-    const potentialPiece = tileToPiece[currTile];
+    const potentialPiece = tileToPiece[currTile.id];
     if(potentialPiece instanceof Brute && potentialPiece.team !== currPlayer) return 1;
     return 0;
 }

@@ -9,7 +9,7 @@ function handlePieceClick(piece){
 
 // Place a piece onto a tile
 function setPieceOnTile(piece, tile){
-    tileToPiece[tile] = piece;
+    tileToPiece[tile.id] = piece;
     tile.classList.add('has-piece');
     const image = document.createElement("img");
     image.src = `../imgs/pieces/${piece.name}.png`;
@@ -21,7 +21,7 @@ function setPieceOnTile(piece, tile){
 
 // Remove a piece from a tile
 function removePieceFromTile(piece, tile) {
-    delete tileToPiece.tile;
+    delete tileToPiece.tile.id;
     const pieceImg = tile.querySelector(`#${piece.name}`);
     if(pieceImg) {
         pieceImg.remove();
@@ -34,6 +34,7 @@ function removePieceFromTile(piece, tile) {
 // Die value update callbacks
 function fourDieUpdate(newVal){
     gameState.fourDieVal = newVal;
+    console.log(newVal);
 }
 function sixDieUpdate(newVal){
     gameState.sixDieVal = newVal;
@@ -81,7 +82,7 @@ async function rollFourDie() {
     document.getElementById("instruction").innerText = "Please roll the 4 sided die.";
 
     const die = document.getElementById('4die');
-    const faces = 4;
+    const faces = 15;
     await new Promise((resolve) => {
         die.addEventListener('click', async function handler(e) {
             await onDieClick(e, faces, fourDieUpdate);
