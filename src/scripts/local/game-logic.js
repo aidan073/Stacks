@@ -1,4 +1,4 @@
-import { coordToTileName, clearDots, tileToPiece } from "./game-utils.js";
+import { coordToTileName, clearSelection, tileToPiece } from "./game-utils.js";
 import { Numeric, Ghost, Brute } from "./game-classes.js";
 
 function findValidMoves(startCoord, roll, conditionalCallback, currPlayer) {
@@ -48,10 +48,10 @@ function findValidMoves(startCoord, roll, conditionalCallback, currPlayer) {
 
 function mover(gameState) {
     if(this.isSelected){
-        clearDots(gameState.turn);
-        this.isSelected = false;
+        clearSelection(gameState.turn);
         return;
     }
+    clearSelection(gameState.turn);
     this.isSelected = true;
     const rootCoord = this.coord;
     const roll = gameState.fourDieVal;

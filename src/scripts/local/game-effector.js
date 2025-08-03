@@ -34,7 +34,6 @@ function removePieceFromTile(piece, tile) {
 // Die value update callbacks
 function fourDieUpdate(newVal){
     gameState.fourDieVal = newVal;
-    console.log(newVal);
 }
 function sixDieUpdate(newVal){
     gameState.sixDieVal = newVal;
@@ -82,7 +81,7 @@ async function rollFourDie() {
     document.getElementById("instruction").innerText = "Please roll the 4 sided die.";
 
     const die = document.getElementById('4die');
-    const faces = 15;
+    const faces = 4;
     await new Promise((resolve) => {
         die.addEventListener('click', async function handler(e) {
             await onDieClick(e, faces, fourDieUpdate);

@@ -7,7 +7,7 @@ const coordToTileName = coord => {
 }
 
 // Convert tile name to piece on that tile
-const tileToPiece = {};
+const tileToPiece = {}; // {tile.id: piece}
 
 // Convert the name (see redSpawns, blueSpawns) of a piece to an actual Piece object
 function pieceNameToPiece(pieceName, currCoord){
@@ -21,13 +21,15 @@ function pieceNameToPiece(pieceName, currCoord){
     }
 }
 
-// Clear movement dots from board
-function clearDots(currPlayer){
+// Clear piece move selection
+function clearSelection(currPlayer){
     const tiles = document.getElementById("board").children;
     for(const tile of tiles){
+        const potentialPiece = tileToPiece[tile.id];
+        if(potentialPiece && potentialPiece.team === currPlayer) potentialPiece.isSelected = false;
         tile.classList.remove(`${currPlayer}-dot`);
         tile.classList.remove(`${currPlayer}-capture`);
     }
 }
 
-export { coordToTileName, tileToPiece, pieceNameToPiece, clearDots }
+export { coordToTileName, tileToPiece, pieceNameToPiece, clearSelection }
