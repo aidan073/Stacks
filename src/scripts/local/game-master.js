@@ -1,4 +1,4 @@
-import { coordToTile, pieceNameToPiece } from "./game-utils.js"
+import { coordToTileName, pieceNameToPiece } from "./game-utils.js"
 import { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollFourDie, movePiece } from "./game-effector.js";
 
 const redPieces = {};
@@ -64,7 +64,7 @@ function createBoard(){
 function setSpecialTiles(){
     for(const [k, v] of Object.entries(specialTiles)){
         v.forEach(coord => {
-            const currTile = document.getElementById(coordToTile(coord));
+            const currTile = document.getElementById(coordToTileName(coord));
             currTile.classList.add(k);
             currTile.innerHTML = `<span class="tile-label">${k}</span>`;
         });
@@ -77,7 +77,7 @@ function populateBoard(){
     for(const [k, v] of Object.entries(redSpawns)){
         const thisPiece = pieceNameToPiece(k, v);
         redPieces[k] = thisPiece;
-        const currTile = document.getElementById(coordToTile(v));
+        const currTile = document.getElementById(coordToTileName(v));
         const htmlPieceId = setPieceOnTile(thisPiece, currTile);
         thisPiece.clickHandler = () => handlePieceClick(thisPiece);
         document.getElementById(htmlPieceId).addEventListener('click', thisPiece.clickHandler);
@@ -86,7 +86,7 @@ function populateBoard(){
     for(const [k, v] of Object.entries(blueSpawns)){
         const thisPiece = pieceNameToPiece(k, v);
         bluePieces[k] = thisPiece;
-        const currTile = document.getElementById(coordToTile(v));
+        const currTile = document.getElementById(coordToTileName(v));
         const htmlPieceId = setPieceOnTile(thisPiece, currTile);
         thisPiece.clickHandler = () => handlePieceClick(thisPiece);
         document.getElementById(htmlPieceId).addEventListener('click', thisPiece.clickHandler);

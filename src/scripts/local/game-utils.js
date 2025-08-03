@@ -1,8 +1,8 @@
 import { Numeric, Ghost, Brute } from "./game-classes.js";
 
 // Convert [x,y] coord to tile id
-const coordToTile = coord => {
-    if(coord[0] >= window.boardSize || coord[1] >= window.boardSize) return;
+const coordToTileName = coord => {
+    if(coord[0] < 0 || coord[1] < 0 || coord[0] >= window.boardSize || coord[1] >= window.boardSize) return;
     return `tile${coord[0]*window.boardSize+coord[1]}`;
 }
 
@@ -29,4 +29,4 @@ function clearDots(currPlayer){
     }
 }
 
-export { coordToTile, tileToPiece, pieceNameToPiece, clearDots }
+export { coordToTileName, tileToPiece, pieceNameToPiece, clearDots }
