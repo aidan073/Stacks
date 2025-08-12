@@ -1,21 +1,27 @@
 import gameState from "./game-master.js";
-import { tileToPiece } from "./game-utils.js";
 // Functions that affect the game state as it is being played
 
-function handlePieceClick(piece){
-    if(gameState.activity !== "moving" || piece.team !== gameState.turn) return;
-    piece.mover(gameState);
+// Clear piece move selection
+function clearSelection(currPlayer){
+    const tiles = gameState.tiles;
+    for(const tile of tiles){
+        const potentialPiece = tile.piece;
+        if(potentialPiece && potentialPiece.team === currPlayer) potentialPiece.isSelected = false;
+        tile.tileElement.classList.remove(`${currPlayer}-dot`);
+        tile.tileElement.classList.remove(`${currPlayer}-capture`);
+    }
 }
 
 // Place a piece onto a tile
 function setPieceOnTile(piece, tile){
-    tileToPiece[tile.id] = piece;
-    tile.classList.add('has-piece');
+    tile.piece = piece;
+    const tileElement = tile.tileElement;
+    tileElement.classList.add('has-piece');
     const image = document.createElement("img");
     image.src = `../imgs/pieces/${piece.name}.png`;
     image.id = piece.name;
     image.class = "piece-img";
-    tile.appendChild(image);
+    tileElement.appendChild(image);
     return image.id;
 }
 
@@ -92,7 +98,8 @@ async function rollFourDie() {
 
 function movePiece(){
     gameState.activity = "moving";
+
     // TODO: Make sure after moving a piece, that piece.isSelected is set to false.
 }
 
-export { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollFourDie, movePiece };
+export { setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollFourDie, movePiece, clearSelection};

@@ -166,6 +166,10 @@ main {
   width: 100%;
 }
 
+.tile.has-piece {
+  cursor: pointer;
+}
+
 .tile.tEven {
   background-color: #fffdd5;
 }
@@ -257,7 +261,7 @@ img[id^="b"] {
   height: 100%;
   box-sizing: border-box;
   object-fit: contain;
-  cursor: pointer;
+  pointer-events: none;
   user-select: none;
   position: absolute;
   top: 0;

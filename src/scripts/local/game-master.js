@@ -1,13 +1,15 @@
-import { coordToTileName, pieceNameToPiece } from "./game-utils.js"
-import { handlePieceClick, setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollFourDie, movePiece } from "./game-effector.js";
+import { Tile, onTileClick, coordToTileIdx } from "./tiles.js"
+import { pieceNameToPiece } from "./pieces.js";
+import { setPieceOnTile, removePieceFromTile, resetBoard, toggleTurn, rollFourDie, movePiece } from "./game-effector.js";
 
 const redPieces = {};
 const bluePieces = {};
+const tiles = [];
 window.boardSize = 8;
 
-// Class to store all necessary game state properties
+// Master game state class with all necessary properties
 class State{
-    constructor(status, reds, blues){
+    constructor(status, tiles, reds, blues){
         this.turn;
         this.activity; // waiting, rolling, moving, 
         this.sixDieVal;
@@ -15,10 +17,11 @@ class State{
         this.status = status;
         this.reds = reds;
         this.blues = blues;
+        this.tiles = tiles;
     }
 }
 
-const gameState = new State("off", undefined, undefined);
+const gameState = new State("off", tiles, redPieces, bluePieces);
 export default gameState;
 
 // Spawn mappings
@@ -45,17 +48,39 @@ const blueSpawns = {
     "bGhost": [2, 7]
 }
 
+// When 'Play Game' is selected
+function onPlayGame(){
+    setGameState("on");
+    gameState.turn = Math.random() >= 0.5 ? "red" : "blue"; // The starting player will actually be the opposite of this outcome.
+    gameLoop();
+}
+
+// Main game loop
+async function gameLoop(){
+    while(gameState.status !== "off"){
+        toggleTurn();
+        await rollFourDie();
+        await movePiece();
+        // await playAgain?
+        break;
+    }
+    return;
+}
+
 // Create tiles
 function createBoard(){
     for(let row = 0; row < window.boardSize; row++){
         for(let column = 0; column < window.boardSize; column++){
-            const tile = document.createElement("div");
-            let tileId = window.boardSize*row+column;
-            tile.className = `tile ${(tileId+row) % 2 === 0 ? "tEven": "tOdd"}`;
-            tile.id = `tile${tileId}`;
-            tile.dataset.row = row;
-            tile.dataset.column = column;
-            board.appendChild(tile);
+            // Create tile element
+            const tileElement = document.createElement("div");
+            tileElement.className = `tile ${(tiles.length+row) % 2 === 0 ? "tEven": "tOdd"}`;
+            tileElement.dataset.tileIdx = tiles.length;
+            board.appendChild(tileElement);
+            tileElement.addEventListener('click', onTileClick);
+
+            // Create tile obj
+            const tileObj = new Tile(tileElement, row, column, tiles.length);
+            tiles.push(tileObj);
         }
     }
 }
@@ -64,9 +89,14 @@ function createBoard(){
 function setSpecialTiles(){
     for(const [k, v] of Object.entries(specialTiles)){
         v.forEach(coord => {
-            const currTile = document.getElementById(coordToTileName(coord));
-            currTile.classList.add(k);
-            currTile.innerHTML = `<span class="tile-label">${k}</span>`;
+            // Update tile obj
+            const currTile = tiles[coordToTileIdx(coord)];
+            currTile.specialTileType = k;
+            
+            // Update tile element
+            const tileElement = currTile.tileElement;
+            tileElement.classList.add(k);
+            tileElement.innerHTML = `<span class="tile-label">${k}</span>`;
         });
     }
 }
@@ -75,21 +105,17 @@ function setSpecialTiles(){
 function populateBoard(){
     // Populate reds
     for(const [k, v] of Object.entries(redSpawns)){
-        const thisPiece = pieceNameToPiece(k, v);
+        const currTile = tiles[coordToTileIdx(v)];
+        const thisPiece = pieceNameToPiece(k, currTile);
         redPieces[k] = thisPiece;
-        const currTile = document.getElementById(coordToTileName(v));
-        const htmlPieceId = setPieceOnTile(thisPiece, currTile);
-        thisPiece.clickHandler = () => handlePieceClick(thisPiece);
-        document.getElementById(htmlPieceId).addEventListener('click', thisPiece.clickHandler);
+        setPieceOnTile(thisPiece, currTile);
     };
     // Populate blues
     for(const [k, v] of Object.entries(blueSpawns)){
-        const thisPiece = pieceNameToPiece(k, v);
+        const currTile = tiles[coordToTileIdx(v)];
+        const thisPiece = pieceNameToPiece(k, currTile);
         bluePieces[k] = thisPiece;
-        const currTile = document.getElementById(coordToTileName(v));
-        const htmlPieceId = setPieceOnTile(thisPiece, currTile);
-        thisPiece.clickHandler = () => handlePieceClick(thisPiece);
-        document.getElementById(htmlPieceId).addEventListener('click', thisPiece.clickHandler);
+        setPieceOnTile(thisPiece, currTile);
     };
 }
 
@@ -105,33 +131,14 @@ function setGameState(newState) {
     }
 }
 
-// When 'Play Game' is selected
-function onPlayGame(){
-    setGameState("on");
-    gameState.turn = Math.random() >= 0.5 ? "red" : "blue"; // The starting player will actually be the opposite of this outcome.
-    gameLoop();
-}
-
-async function gameLoop(){
-    while(gameState.status != "off"){
-        toggleTurn();
-        await rollFourDie();
-        movePiece();
-        break;
-    }
-    return;
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     // Game initialization
     createBoard();
     setSpecialTiles();
     populateBoard();
-    gameState.reds = redPieces;
-    gameState.blues = bluePieces;
     window.onbeforeunload = () => {return gameState.status === "on" ? '' : undefined}; // prevent user from refreshing an active game.
 
     // Play button
-    let playButton = document.getElementById("play-button");
+    const playButton = document.getElementById("play-button");
     playButton.addEventListener('click', (e) => onPlayGame());
 });
