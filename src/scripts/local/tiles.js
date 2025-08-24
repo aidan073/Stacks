@@ -1,3 +1,4 @@
+import { Status, Phase } from "./enums.js";
 import gameState from "./game-master.js";
 import { onPieceClick } from "./pieces.js";
 
@@ -19,8 +20,8 @@ const coordToTileIdx = coord => {
 }
 
 function onTileClick() {
-    if(gameState.status === "off") return;
-    if(gameState.activity !== "moving") return;
+    if(gameState.status !== Status.Active) return;
+    if(gameState.phase !== Phase.Moving) return;
     const tileObj = gameState.tiles[parseInt(this.dataset.tileIdx, 10)];
     if(tileObj.piece) onPieceClick(tileObj.piece);
 }

@@ -1,3 +1,4 @@
+import { Phase } from "./enums.js"; 
 import gameState from "./game-master.js";
 // Functions that affect the game state as it is being played
 
@@ -72,18 +73,18 @@ function resetBoard(){
 
 // Turn flow functions
 function toggleTurn(){
-    if(gameState.turn === "red"){
-        gameState.turn = "blue";
+    if(gameState.currPlayer === "red"){
+        gameState.currPlayer = "blue";
         document.getElementById("turn-announcer").innerHTML = `<span id=blue-turn-text>Blue's</span> turn.`;
     }
     else{
-        gameState.turn = "red";
+        gameState.currPlayer = "red";
         document.getElementById("turn-announcer").innerHTML = `<span id=red-turn-text>Red's</span> turn.`;
     }
 }
 
 async function rollFourDie() {
-    gameState.activity = "rolling";
+    gameState.phase = Phase.Rolling;
     document.getElementById("instruction").innerText = "Please roll the 4 sided die.";
 
     const die = document.getElementById('4die');
@@ -97,7 +98,7 @@ async function rollFourDie() {
 }
 
 function movePiece(){
-    gameState.activity = "moving";
+    gameState.phase = Phase.Moving;
 
     // TODO: Make sure after moving a piece, that piece.isSelected is set to false.
 }

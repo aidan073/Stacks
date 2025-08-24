@@ -11,14 +11,14 @@ class Piece{
     }
     mover() {
         if(this.isSelected){
-            clearSelection(gameState.turn);
+            clearSelection(gameState.currPlayer);
             return;
         }
-        clearSelection(gameState.turn);
+        clearSelection(gameState.currPlayer);
         this.isSelected = true;
         const rootCoord = [this.tile.row, this.tile.column];
         const roll = gameState.fourDieVal;
-        findValidMoves(rootCoord, roll, this.moveConditions.bind(this), gameState.turn);
+        findValidMoves(rootCoord, roll, this.moveConditions.bind(this), gameState.currPlayer);
     }
 }
 
@@ -129,7 +129,7 @@ function pieceNameToPiece(pieceName, tile){
 
 // Event handler for tiles containing a piece (this refers to tile)
 function onPieceClick(piece){
-    if(piece.team === gameState.turn && piece.tile.tileElement.classList.contains(`${gameState.turn}-capture`)){
+    if(piece.team === gameState.currPlayer && piece.tile.tileElement.classList.contains(`${gameState.currPlayer}-capture`)){
         // capture a piece
         return;
     }

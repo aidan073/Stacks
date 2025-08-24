@@ -1,5 +1,6 @@
-import { Tile, onTileClick, coordToTileIdx } from "./tiles.js"
+import { Status } from "./enums.js";
 import { pieceNameToPiece } from "./pieces.js";
+import { Tile, onTileClick, coordToTileIdx } from "./tiles.js"
 import { setPieceOnTile, removePieceFromTile, resetBoard, toggleTurn, rollFourDie, movePiece } from "./game-effector.js";
 
 const redPieces = {};
@@ -10,57 +11,59 @@ window.boardSize = 8;
 // Master game state class with all necessary properties
 class State{
     constructor(status, tiles, reds, blues){
-        this.turn;
-        this.activity; // waiting, rolling, moving, 
-        this.sixDieVal;
-        this.fourDieVal;
-        this.status = status;
         this.reds = reds;
         this.blues = blues;
         this.tiles = tiles;
+        this.status = status;
+
+        this.phase;
+        this.currPlayer;
+        this.sixDieVal = null;
+        this.fourDieVal = null;
     }
 }
 
-const gameState = new State("off", tiles, redPieces, bluePieces);
+const gameState = new State(Status.Inactive, tiles, redPieces, bluePieces);
 export default gameState;
 
 // Spawn mappings
-const specialTiles = {
-    "Luck": [[0, 7]],
-    "Risk": [[0, 6], [1, 7]],
-    "Draw": [[5, 2]],
-    "Bank": [[7, 0]]
-}
-const redSpawns = {
-    "rBrute": [0, 0],
-    "rNumeric1": [0, 1],
-    "rNumeric2": [0, 2],
-    "rNumeric3": [0, 3],
-    "rNumeric4": [0, 4],
-    "rGhost": [0, 5]
-}
-const blueSpawns = {
-    "bBrute": [7, 7],
-    "bNumeric1": [6, 7],
-    "bNumeric2": [5, 7],
-    "bNumeric3": [4, 7],
-    "bNumeric4": [3, 7],
-    "bGhost": [2, 7]
-}
+const specialTiles = Object.freeze({
+    Luck: [[0, 7]],
+    Risk: [[0, 6], [1, 7]],
+    Draw: [[5, 2]],
+    Bank: [[7, 0]]
+});
+const redSpawns = Object.freeze({
+    rBrute: [0, 0],
+    rNumeric1: [0, 1],
+    rNumeric2: [0, 2],
+    rNumeric3: [0, 3],
+    rNumeric4: [0, 4],
+    rGhost: [0, 5]
+});
+const blueSpawns = Object.freeze({
+    bBrute: [7, 7],
+    bNumeric1: [6, 7],
+    bNumeric2: [5, 7],
+    bNumeric3: [4, 7],
+    bNumeric4: [3, 7],
+    bGhost: [2, 7]
+});
 
 // When 'Play Game' is selected
 function onPlayGame(){
-    setGameState("on");
-    gameState.turn = Math.random() >= 0.5 ? "red" : "blue"; // The starting player will actually be the opposite of this outcome.
+    setGameStatus(Status.Active);
+    gameState.currPlayer = Math.random() >= 0.5 ? "red" : "blue"; // The starting player will actually be the opposite of this outcome.
     gameLoop();
 }
 
 // Main game loop
 async function gameLoop(){
-    while(gameState.status !== "off"){
+    while(gameState.status === Status.Active){
         toggleTurn();
         await rollFourDie();
         await movePiece();
+        // await postMovePiece();
         // await playAgain?
         break;
     }
@@ -120,15 +123,14 @@ function populateBoard(){
 }
 
 // Turn game on or off, and perform necessary logic + visual changes
-function setGameState(newState) {
+function setGameStatus(newState) {
     const gameOverlay = document.getElementById("game-overlay");
-    if (newState === "off") {
-        gameState.status = "off";
+    if (newState === Status.Inactive) {
         gameOverlay.classList.remove("hidden");
     } else {
-        gameState.status = "on";
         gameOverlay.classList.add("hidden");
     }
+    gameState.status = newState;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -136,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createBoard();
     setSpecialTiles();
     populateBoard();
-    window.onbeforeunload = () => {return gameState.status === "on" ? '' : undefined}; // prevent user from refreshing an active game.
+    window.onbeforeunload = () => {return gameState.status === Status.Active ? '' : undefined}; // prevent user from refreshing an active game.
 
     // Play button
     const playButton = document.getElementById("play-button");
