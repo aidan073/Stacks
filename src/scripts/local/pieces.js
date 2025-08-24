@@ -127,13 +127,21 @@ function pieceNameToPiece(pieceName, tile){
     }
 }
 
-// Event handler for tiles containing a piece (this refers to tile)
-function onPieceClick(piece){
-    if(piece.team === gameState.currPlayer && piece.tile.tileElement.classList.contains(`${gameState.currPlayer}-capture`)){
+// Event handler for tiles containing the current player's piece ("this" refers to the tile)
+function onSelfPieceClick(piece){
+    if(piece.tile.tileElement.classList.contains(`${gameState.currPlayer}-capture`)){
         // capture a piece
         return;
     }
     piece.mover();
 }
 
-export { pieceNameToPiece, onPieceClick }
+// Event handler for tiles containing the enemy player's piece ("this" refers to the tile)
+function onEnemyPieceClick(piece){
+    if(piece.tile.tileElement.classList.contains(`${gameState.currPlayer}-capture`)){
+        // capture a piece
+        return;
+    }
+}
+
+export { pieceNameToPiece, onSelfPieceClick, onEnemyPieceClick }

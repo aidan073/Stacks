@@ -1,6 +1,6 @@
 import { Status, Phase } from "./enums.js";
 import gameState from "./game-master.js";
-import { onPieceClick } from "./pieces.js";
+import { onSelfPieceClick, onEnemyPieceClick } from "./pieces.js";
 
 class Tile{
     constructor(tileElement, row, column, idx, piece=null, specialTileType=null){
@@ -23,7 +23,14 @@ function onTileClick() {
     if(gameState.status !== Status.Active) return;
     if(gameState.phase !== Phase.Moving) return;
     const tileObj = gameState.tiles[parseInt(this.dataset.tileIdx, 10)];
-    if(tileObj.piece) onPieceClick(tileObj.piece);
+    if(tileObj.piece){
+        if(tileObj.piece.team == gameState.currPlayer){
+            onSelfPieceClick(tileObj.piece);
+        }
+        else{
+            onEnemyPieceClick(tileObj.piece);
+        }
+    }
 }
 
 export { Tile, coordToTileIdx, onTileClick }
