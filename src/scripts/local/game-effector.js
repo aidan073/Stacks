@@ -2,11 +2,6 @@ import { Phase, Status } from "./enums.js";
 import gameState from "./game-master.js";
 // Functions that affect the game state as it is being played
 
-// Capture the input piece
-function capturePiece(piece){
-    return
-}
-
 // Clear piece move selection
 function clearSelection(){
     const validMoveHandlers = gameState.board.validMoveHandlers;
@@ -66,4 +61,4 @@ function toggleTurn(){
     }
 }
 
-export { onDieClick, resetBoard, toggleTurn, clearSelection, capturePiece };
+export { onDieClick, resetBoard, toggleTurn, clearSelection };

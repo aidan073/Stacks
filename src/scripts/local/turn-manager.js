@@ -76,7 +76,8 @@ class TurnManager extends EventTarget {
         }
         else{
             gameState.board.bluePieces.forEach((currPiece) => {
-                currPiece.tile.tileElement.addEventListener("click", () => onSelfPieceClick(currPiece));
+                const handler = () => onSelfPieceClick(currPiece);
+                currPiece.tile.tileElement.addEventListener("click", handler);
                 gameState.board.pieceClickHandlers.set(currPiece, handler);
             });
         }

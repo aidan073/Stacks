@@ -1,7 +1,7 @@
 import { Ghost } from "./pieces.js";
 import { TurnEvents } from "./enums.js";
 import gameState from "./game-master.js";
-import { capturePiece, clearSelection } from "./game-effector.js";
+import { clearSelection } from "./game-effector.js";
 
 class Tile{
     constructor(tileElement, row, column, idx, piece=null, specialTileType=null){
@@ -16,12 +16,13 @@ class Tile{
 
 // When a tile is a valid move and is clicked
 function onValidMoveClick(piece, destinationTile){
-    piece.setOnTile(destinationTile);
-    clearSelection();
+    const capture = false;
     // Warning: this condition allows you to capture your own piece. However, your piece shouldn't be a valid move (except ghost).
     if(destinationTile.piece !== null && !(destinationTile.piece instanceof Ghost)){
-        capturePiece(destinationTile.piece);
+        capture = true;
     }
+    piece.setOnTile(destinationTile, capture);
+    clearSelection();
     gameState.turnManager.dispatchEvent(new CustomEvent(TurnEvents.MAKE_MOVE_COMPLETE));
 }
 

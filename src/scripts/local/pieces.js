@@ -23,9 +23,12 @@ class Piece{
     }
 
     // Place this piece onto a tile
-    setOnTile(tile){
+    setOnTile(tile, capture=true){
         if(this.tile !== null){
             this._removeFromTile();
+        }
+        if(capture){
+            capturePiece(tile.piece);
         }
         tile.piece = this;
         const tileElement = tile.tileElement;
@@ -40,6 +43,7 @@ class Piece{
 
     // Remove this piece from its tile
     _removeFromTile() {
+        this.tile.piece = null;
         const pieceImg = this.tile.tileElement.querySelector(`#${this.name}`);
         if(pieceImg) {
             pieceImg.remove();
@@ -73,7 +77,7 @@ class Brute extends Piece{
 }
 
 function findValidMoves(startCoord, roll, conditionalCallback, currPlayer) {
-    const validMoveOptions = []
+    const validMoveOptions = [];
 
     const queue = [
         [startCoord[0]+1, startCoord[1]],
@@ -168,6 +172,11 @@ function onSelfPieceClick(piece){
         tile.tileElement.addEventListener("click", handler)
         gameState.board.validMoveHandlers.set(tile, handler);
     });
+}
+
+// Capture the input piece
+function capturePiece(piece){
+    return;
 }
 
 export { createPieceFromPieceName, onSelfPieceClick, Ghost }
