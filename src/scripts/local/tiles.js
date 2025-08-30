@@ -1,16 +1,28 @@
-import { Status, Phase } from "./enums.js";
+import { Ghost } from "./pieces.js";
+import { TurnEvents } from "./enums.js";
 import gameState from "./game-master.js";
-import { onSelfPieceClick, onEnemyPieceClick } from "./pieces.js";
+import { capturePiece, clearSelection } from "./game-effector.js";
 
 class Tile{
     constructor(tileElement, row, column, idx, piece=null, specialTileType=null){
         this.tileElement = tileElement;
+        this.piece = piece;
         this.row = row;
         this.column = column;
         this.idx = idx;
-        this.piece = piece;
         this.specialTileType = specialTileType; // Luck, Risk, Draw, Bank
     }
+}
+
+// When a tile is a valid move and is clicked
+function onValidMoveClick(piece, destinationTile){
+    piece.setOnTile(destinationTile);
+    clearSelection();
+    // Warning: this condition allows you to capture your own piece. However, your piece shouldn't be a valid move (except ghost).
+    if(destinationTile.piece !== null && !(destinationTile.piece instanceof Ghost)){
+        capturePiece(destinationTile.piece);
+    }
+    gameState.turnManager.dispatchEvent(new CustomEvent(TurnEvents.MAKE_MOVE_COMPLETE));
 }
 
 // Convert [x,y] coord to tile idx
@@ -19,18 +31,4 @@ const coordToTileIdx = coord => {
     return coord[0]*window.boardSize+coord[1];
 }
 
-function onTileClick() {
-    if(gameState.status !== Status.Active) return;
-    if(gameState.phase !== Phase.Moving) return;
-    const tileObj = gameState.tiles[parseInt(this.dataset.tileIdx, 10)];
-    if(tileObj.piece){
-        if(tileObj.piece.team == gameState.currPlayer){
-            onSelfPieceClick(tileObj.piece);
-        }
-        else{
-            onEnemyPieceClick(tileObj.piece);
-        }
-    }
-}
-
-export { Tile, coordToTileIdx, onTileClick }
+export { Tile, coordToTileIdx, onValidMoveClick }

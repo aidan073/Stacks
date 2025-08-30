@@ -1,29 +1,30 @@
+import { Board } from "./board.js";
 import { Status } from "./enums.js";
-import { pieceNameToPiece } from "./pieces.js";
-import { Tile, onTileClick, coordToTileIdx } from "./tiles.js"
-import { setPieceOnTile, removePieceFromTile, resetBoard, toggleTurn, rollFourDie, movePiece } from "./game-effector.js";
+import TurnManager from "./turn-manager.js";
+import { createPieceFromPieceName } from "./pieces.js";
+import { resetBoard, toggleTurn } from "./game-effector.js";
+import { Tile, coordToTileIdx } from "./tiles.js"
 
-const redPieces = {};
-const bluePieces = {};
 const tiles = [];
+const redPieces = [];
+const bluePieces = [];
 window.boardSize = 8;
 
 // Master game state class with all necessary properties
 class State{
-    constructor(status, tiles, reds, blues){
-        this.reds = reds;
-        this.blues = blues;
-        this.tiles = tiles;
-        this.status = status;
-
-        this.phase;
+    constructor(status){
+        this.status = status; // active or inactive
+        this.phase; // e.g. rolling, moving
+        this.board;
         this.currPlayer;
         this.sixDieVal = null;
         this.fourDieVal = null;
+        this.turnManager = null;
     }
 }
 
-const gameState = new State(Status.Inactive, tiles, redPieces, bluePieces);
+const gameState = new State(Status.Inactive);
+gameState.board = new Board(tiles, redPieces, bluePieces)
 export default gameState;
 
 // Spawn mappings
@@ -59,10 +60,12 @@ function onPlayGame(){
 
 // Main game loop
 async function gameLoop(){
+    const turnManager = new TurnManager(); 
+    gameState.turnManager = turnManager;
     while(gameState.status === Status.Active){
         toggleTurn();
-        await rollFourDie();
-        await movePiece();
+        await turnManager.rollFourDie();
+        await turnManager.makeMove();
         // await postMovePiece();
         // await playAgain?
         break;
@@ -72,6 +75,7 @@ async function gameLoop(){
 
 // Create tiles
 function createBoard(){
+    const board = document.getElementById("board");
     for(let row = 0; row < window.boardSize; row++){
         for(let column = 0; column < window.boardSize; column++){
             // Create tile element
@@ -79,13 +83,13 @@ function createBoard(){
             tileElement.className = `tile ${(tiles.length+row) % 2 === 0 ? "tEven": "tOdd"}`;
             tileElement.dataset.tileIdx = tiles.length;
             board.appendChild(tileElement);
-            tileElement.addEventListener('click', onTileClick);
 
             // Create tile obj
-            const tileObj = new Tile(tileElement, row, column, tiles.length);
-            tiles.push(tileObj);
+            const tile = new Tile(tileElement, row, column, tiles.length);
+            tiles.push(tile);
         }
     }
+    gameState.board.boardElement = board;
 }
 
 // Set special tiles onto board
@@ -108,17 +112,17 @@ function setSpecialTiles(){
 function populateBoard(){
     // Populate reds
     for(const [k, v] of Object.entries(redSpawns)){
-        const currTile = tiles[coordToTileIdx(v)];
-        const thisPiece = pieceNameToPiece(k, currTile);
-        redPieces[k] = thisPiece;
-        setPieceOnTile(thisPiece, currTile);
+        const currtile = tiles[coordToTileIdx(v)];
+        const thisPiece = createPieceFromPieceName(k, currtile);
+        thisPiece.setOnTile(currtile);
+        redPieces.push(thisPiece);
     };
     // Populate blues
     for(const [k, v] of Object.entries(blueSpawns)){
-        const currTile = tiles[coordToTileIdx(v)];
-        const thisPiece = pieceNameToPiece(k, currTile);
-        bluePieces[k] = thisPiece;
-        setPieceOnTile(thisPiece, currTile);
+        const currtile = tiles[coordToTileIdx(v)];
+        const thisPiece = createPieceFromPieceName(k, currtile);
+        thisPiece.setOnTile(currtile);
+        bluePieces.push(thisPiece);
     };
 }
 

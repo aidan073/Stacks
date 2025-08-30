@@ -1,51 +1,34 @@
-import { Phase } from "./enums.js"; 
+import { Phase, Status } from "./enums.js"; 
 import gameState from "./game-master.js";
 // Functions that affect the game state as it is being played
 
+// Capture the input piece
+function capturePiece(piece){
+    return
+}
+
 // Clear piece move selection
-function clearSelection(currPlayer){
-    const tiles = gameState.tiles;
-    for(const tile of tiles){
-        const potentialPiece = tile.piece;
-        if(potentialPiece && potentialPiece.team === currPlayer) potentialPiece.isSelected = false;
-        tile.tileElement.classList.remove(`${currPlayer}-dot`);
-        tile.tileElement.classList.remove(`${currPlayer}-capture`);
+function clearSelection(){
+    const validMoveHandlers = gameState.board.validMoveHandlers;
+    for(const [tile, handler] of validMoveHandlers){
+        tile.tileElement.removeEventListener("click", handler);
+        validMoveHandlers.delete(tile);
+        tile.tileElement.classList.remove(`${gameState.currPlayer}-dot`);
+        tile.tileElement.classList.remove(`${gameState.currPlayer}-capture`);
+    }
+    let currPlayerPieces = null;
+    if(gameState.currPlayer === "red"){
+        currPlayerPieces = gameState.board.redPieces;
+    }
+    else{
+        currPlayerPieces = gameState.board.bluePieces;
+    }
+    for(const piece of currPlayerPieces){
+        piece.isSelected = false;
     }
 }
 
-// Place a piece onto a tile
-function setPieceOnTile(piece, tile){
-    tile.piece = piece;
-    const tileElement = tile.tileElement;
-    tileElement.classList.add('has-piece');
-    const image = document.createElement("img");
-    image.src = `../imgs/pieces/${piece.name}.png`;
-    image.id = piece.name;
-    image.class = "piece-img";
-    tileElement.appendChild(image);
-    return image.id;
-}
-
-// Remove a piece from a tile
-function removePieceFromTile(piece, tile) {
-    delete tileToPiece.tile.id;
-    const pieceImg = tile.querySelector(`#${piece.name}`);
-    if(pieceImg) {
-        pieceImg.remove();
-        if(!tile.querySelector(".piece-img")){
-            tile.classList.remove('has-piece');
-        }
-    }
-}
-
-// Die value update callbacks
-function fourDieUpdate(newVal){
-    gameState.fourDieVal = newVal;
-}
-function sixDieUpdate(newVal){
-    gameState.sixDieVal = newVal;
-}
-
+// When die is clicked (Use by turn-manager)
 function onDieClick(e, faces, onResult) {
     const die = e.currentTarget;
     return new Promise((resolve) => {
@@ -83,24 +66,4 @@ function toggleTurn(){
     }
 }
 
-async function rollFourDie() {
-    gameState.phase = Phase.Rolling;
-    document.getElementById("instruction").innerText = "Please roll the 4 sided die.";
-
-    const die = document.getElementById('4die');
-    const faces = 4;
-    await new Promise((resolve) => {
-        die.addEventListener('click', async function handler(e) {
-            await onDieClick(e, faces, fourDieUpdate);
-            resolve();
-        }, {once: true});
-    });
-}
-
-function movePiece(){
-    gameState.phase = Phase.Moving;
-
-    // TODO: Make sure after moving a piece, that piece.isSelected is set to false.
-}
-
-export { setPieceOnTile, removePieceFromTile, onDieClick, resetBoard, toggleTurn, rollFourDie, movePiece, clearSelection};
+export { onDieClick, resetBoard, toggleTurn, clearSelection, capturePiece };
