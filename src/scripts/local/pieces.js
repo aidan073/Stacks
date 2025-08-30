@@ -11,12 +11,6 @@ class Piece{
         this.team = pieceName[0] === "r" ? "red" : "blue";
     }
     mover() {
-        if(this.isSelected){
-            clearSelection();
-            return;
-        }
-        clearSelection();
-        this.isSelected = true;
         const rootCoord = [this.tile.row, this.tile.column];
         const roll = gameState.fourDieVal;
         return findValidMoves(rootCoord, roll, this.moveConditions.bind(this), gameState.currPlayer);
@@ -166,6 +160,12 @@ function createPieceFromPieceName(pieceName, tile){
 
 // Event handler for tiles containing the current player's piece
 function onSelfPieceClick(piece){
+    if(piece.isSelected){
+        clearSelection();
+        return;
+    }
+    clearSelection();
+    piece.isSelected = true;
     const validMoveOptions = piece.mover();
     validMoveOptions.forEach((tile) => {
         const handler = () => onValidMoveClick(piece, tile)
