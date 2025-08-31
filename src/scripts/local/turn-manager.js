@@ -56,8 +56,8 @@ class TurnManager extends EventTarget {
                 const pieceClickHandlers = gameState.board.pieceClickHandlers;
                 for(const [piece, handler] of pieceClickHandlers){
                     piece.tile.tileElement.removeEventListener("click", handler);
-                    pieceClickHandlers.delete(piece);
                 }
+                pieceClickHandlers.clear();
                 resolve();
             }, { once: true });
         });

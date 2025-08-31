@@ -16,7 +16,9 @@ class Tile{
 
 // When a tile is a valid move and is clicked
 function onValidMoveClick(piece, destinationTile){
-    const capture = false;
+    piece.tile.tileElement.removeEventListener("click", gameState.board.pieceClickHandlers.get(piece));
+    gameState.board.pieceClickHandlers.delete(piece);
+    let capture = false;
     // Warning: this condition allows you to capture your own piece. However, your piece shouldn't be a valid move (except ghost).
     if(destinationTile.piece !== null && !(destinationTile.piece instanceof Ghost)){
         capture = true;

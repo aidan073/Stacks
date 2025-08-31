@@ -25,6 +25,7 @@ class Piece{
             capturePiece(tile.piece);
         }
         tile.piece = this;
+        this.tile = tile;
         const tileElement = tile.tileElement;
         tileElement.classList.add('has-piece');
         const image = document.createElement("img");
@@ -45,6 +46,7 @@ class Piece{
                 this.tile.tileElement.classList.remove('has-piece');
             }
         }
+        this.tile = null;
     }
 }
 

@@ -68,7 +68,7 @@ async function gameLoop(){
         await turnManager.makeMove();
         // await postMovePiece();
         // await playAgain?
-        break;
+        // break;
     }
     return;
 }
