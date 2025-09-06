@@ -129,21 +129,44 @@ function numericMoveConditions(currTile, currPlayer){
     if(!currTile) return -1;
     if(currTile.pieces.size === 0) return 0;
     const pieceArr = [...currTile.pieces.keys()]
-    if(pieceArr.every(piece => piece instanceof Ghost)) return 0;
-    if(pieceArr.some(piece => piece instanceof Numeric && piece.team !== currPlayer && this.value > piece.value)) return 1;
-    return -1;
+    let capture = 0;
+    let invalid = 0;
+    for(const piece of pieceArr){
+        if(piece instanceof Numeric){
+            if(piece.team !== currPlayer && this.value > piece.value) capture++;
+            else invalid++;
+        }
+        if(piece instanceof Brute) invalid++;
+    }
+    if(invalid > 0) return -1;
+    else if(capture) return 1;
+    else return 0;
 }
 
 function bruteMoveConditions(currTile, currPlayer){
     if(!currTile) return -1;
     if(currTile.pieces.size === 0) return 0;
     const pieceArr = [...currTile.pieces.keys()]
-    if(pieceArr.some(piece => piece instanceof Numeric && piece.team !== currPlayer)) return 1;
-    return -1;
+    let capture = 0;
+    let invalid = 0;
+    for(const piece of pieceArr){
+        if(piece instanceof Numeric){
+            if(piece.team !== currPlayer) capture++;
+            else invalid++;
+        }
+        if(piece instanceof Ghost){
+            if(piece.team !== currPlayer) invalid++;
+        }
+        if(piece instanceof Brute) invalid++;
+    }
+    if(invalid > 0) return -1;
+    else if(capture) return 1;
+    else return 0;
 }
 
 function ghostMoveConditions(currTile, currPlayer){
     if(!currTile) return -1;
+    if(currTile.pieces.size === 0) return 0;
     const pieceArr = [...currTile.pieces.keys()]
     if(pieceArr.some(piece => piece instanceof Brute && piece.team !== currPlayer)) return 1;
     return 0;
