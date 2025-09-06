@@ -4,9 +4,9 @@ import gameState from "./game-master.js";
 import { clearSelection } from "./game-effector.js";
 
 class Tile{
-    constructor(tileElement, row, column, idx, piece=null, specialTileType=null){
+    constructor(tileElement, row, column, idx, pieces=new Map(), specialTileType=null){
         this.tileElement = tileElement;
-        this.piece = piece;
+        this.pieces = pieces;
         this.row = row;
         this.column = column;
         this.idx = idx;
@@ -20,7 +20,7 @@ function onValidMoveClick(piece, destinationTile){
     gameState.board.pieceClickHandlers.delete(piece);
     let capture = false;
     // Warning: this condition allows you to capture your own piece. However, your piece shouldn't be a valid move (except ghost).
-    if(destinationTile.piece !== null && !(destinationTile.piece instanceof Ghost)){
+    if([...destinationTile.pieces.keys()].some(piece => !(piece instanceof Ghost))){
         capture = true;
     }
     piece.setOnTile(destinationTile, capture);

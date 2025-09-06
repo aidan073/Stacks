@@ -22,9 +22,9 @@ class Piece{
             this._removeFromTile();
         }
         if(capture){
-            capturePiece(tile.piece);
+            capturePiece(tile.pieces);
         }
-        tile.piece = this;
+        tile.pieces.set(this, tile.pieces.keys().length);
         this.tile = tile;
         const tileElement = tile.tileElement;
         tileElement.classList.add('has-piece');
@@ -38,7 +38,7 @@ class Piece{
 
     // Remove this piece from its tile
     _removeFromTile() {
-        this.tile.piece = null;
+        this.tile.pieces.delete(this);
         const pieceImg = this.tile.tileElement.querySelector(`#${this.name}`);
         if(pieceImg) {
             pieceImg.remove();
@@ -127,24 +127,25 @@ function findValidMoves(startCoord, roll, conditionalCallback, currPlayer) {
 // -1 = can't, 0 = can, 1 = capture
 function numericMoveConditions(currTile, currPlayer){
     if(!currTile) return -1;
-    const potentialPiece = currTile.piece;
-    if(!potentialPiece || potentialPiece instanceof Ghost) return 0;
-    if(potentialPiece instanceof Numeric && potentialPiece.team !== currPlayer && this.value > potentialPiece.value) return 1;
+    if(currTile.pieces.size === 0) return 0;
+    const pieceArr = [...currTile.pieces.keys()]
+    if(pieceArr.every(piece => piece instanceof Ghost)) return 0;
+    if(pieceArr.some(piece => piece instanceof Numeric && piece.team !== currPlayer && this.value > piece.value)) return 1;
     return -1;
 }
 
 function bruteMoveConditions(currTile, currPlayer){
     if(!currTile) return -1;
-    const potentialPiece = currTile.piece;
-    if(!potentialPiece) return 0;
-    if(potentialPiece instanceof Numeric && potentialPiece.team !== currPlayer) return 1;
+    if(currTile.pieces.size === 0) return 0;
+    const pieceArr = [...currTile.pieces.keys()]
+    if(pieceArr.some(piece => piece instanceof Numeric && piece.team !== currPlayer)) return 1;
     return -1;
 }
 
 function ghostMoveConditions(currTile, currPlayer){
     if(!currTile) return -1;
-    const potentialPiece = currTile.piece;
-    if(potentialPiece instanceof Brute && potentialPiece.team !== currPlayer) return 1;
+    const pieceArr = [...currTile.pieces.keys()]
+    if(pieceArr.some(piece => piece instanceof Brute && piece.team !== currPlayer)) return 1;
     return 0;
 }
 
