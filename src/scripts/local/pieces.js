@@ -42,7 +42,7 @@ class Piece{
         const pieceImg = this.tile.tileElement.querySelector(`#${this.name}`);
         if(pieceImg) {
             pieceImg.remove();
-            if(!this.tile.tileElement.querySelector(".piece-img")){
+            if(this.tile.pieces.size === 0){
                 this.tile.tileElement.classList.remove('has-piece');
             }
         }
