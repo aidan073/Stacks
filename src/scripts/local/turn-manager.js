@@ -68,14 +68,14 @@ class TurnManager extends EventTarget {
 
     async _makeMoveActor() {
         if(gameState.currPlayer === "red"){
-            gameState.board.redPieces.forEach((currPiece) => {
+            Array.from(gameState.board.redPieces.values()).forEach((currPiece) => {
                 const handler = () => onSelfPieceClick(currPiece);
                 currPiece.tile.tileElement.addEventListener("click", handler);
                 gameState.board.pieceClickHandlers.set(currPiece, handler);
             });
         }
         else{
-            gameState.board.bluePieces.forEach((currPiece) => {
+            Array.from(gameState.board.bluePieces.values()).forEach((currPiece) => {
                 const handler = () => onSelfPieceClick(currPiece);
                 currPiece.tile.tileElement.addEventListener("click", handler);
                 gameState.board.pieceClickHandlers.set(currPiece, handler);

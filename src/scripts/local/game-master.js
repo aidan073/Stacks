@@ -6,8 +6,8 @@ import { resetBoard, toggleTurn } from "./game-effector.js";
 import { Tile, coordToTileIdx } from "./tiles.js"
 
 const tiles = [];
-const redPieces = [];
-const bluePieces = [];
+const redPieces = new Map();
+const bluePieces = new Map();
 window.boardSize = 8;
 
 // Master game state class with all necessary properties
@@ -115,14 +115,14 @@ function populateBoard(){
         const currtile = tiles[coordToTileIdx(v)];
         const thisPiece = createPieceFromPieceName(k, currtile);
         thisPiece.setOnTile(currtile);
-        redPieces.push(thisPiece);
+        redPieces.set(thisPiece.name, thisPiece);
     };
     // Populate blues
     for(const [k, v] of Object.entries(blueSpawns)){
         const currtile = tiles[coordToTileIdx(v)];
         const thisPiece = createPieceFromPieceName(k, currtile);
         thisPiece.setOnTile(currtile);
-        bluePieces.push(thisPiece);
+        bluePieces.set(thisPiece.name, thisPiece);
     };
 }
 

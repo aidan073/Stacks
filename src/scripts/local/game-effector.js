@@ -18,7 +18,7 @@ function clearSelection(){
     else{
         currPlayerPieces = gameState.board.bluePieces;
     }
-    for(const piece of currPlayerPieces){
+    for(const piece of currPlayerPieces.values()){
         piece.isSelected = false;
     }
 }
