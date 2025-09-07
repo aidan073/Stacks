@@ -191,7 +191,7 @@ function onSelfPieceClick(piece){
         return;
     }
     const currPlayerGhost = gameState.currPlayer === "red" ? gameState.board.redPieces.get("rGhost") : gameState.board.bluePieces.get("bGhost");
-    if(currPlayerGhost.isSelected) return;
+    if(currPlayerGhost.isSelected && gameState.board.validMoveHandlers.has(piece.tile)) return;
 
     clearSelection();
     piece.isSelected = true;
