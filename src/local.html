@@ -26,10 +26,49 @@
     </header>
 
     <main>
+      <img
+          class="backdrop"
+          src="../imgs/backdrops/base-backdrop.jpg"
+      />
+      <!-- Settings Menu -->
+      <div id="settings-menu" class="hidden">
+        <div class="settings-content">
+          <h2>Settings</h2>
+          <h3>Audio</h3>
+          <label>
+            <input type="checkbox" id="sound-toggle" />
+            Enable Sound
+          </label>
+          <label>
+            <input type="checkbox" id="music-toggle" />
+            Enable Music
+          </label>
+          <div id="themes">
+            <h3>Theme</h3>
+            <label>
+              <input type="radio" name="theme" value="light" checked />
+              Light
+            </label>
+            <label>
+              <input type="radio" name="theme" value="dark" />
+              Dark
+            </label>
+            <label>
+              <input type="radio" name="theme" value="blue" />
+              Blue
+            </label>
+          </div>
+          <button id="close-settings">Close</button>
+        </div>
+      </div>
+      <!-- Game Container -->
       <div id="game-container">
 
         <div id="text-box">
-          <div id="turn-announcer">Waiting...</div>
+          <div id="text-box-header">
+            <button id="settings-cog"></button>
+            <div id="turn-announcer">Waiting...</div>
+          </div>
           <div id="instruction"></div>
         </div>
 

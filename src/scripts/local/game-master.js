@@ -1,3 +1,4 @@
+import { addUiListeners } from "./misc-ui.js";
 import { Board } from "./board.js";
 import { Status } from "./enums.js";
 import TurnManager from "./turn-manager.js";
@@ -138,6 +139,8 @@ function setGameStatus(newState) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Page initialization
+    addUiListeners();
     // Game initialization
     createBoard();
     setSpecialTiles();

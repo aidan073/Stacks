@@ -10,7 +10,7 @@ body {
 /* Nav */
 .nav-bar {
     position: relative;
-    z-index: 3;
+    z-index: 10;
     display: flex;
     gap: 100px;
     border: none;

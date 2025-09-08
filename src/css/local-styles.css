@@ -10,19 +10,96 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 92px);
   width: 100vw;
   max-width: 100%;
   position: relative;
 }
 
+main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Settings */
+#settings-menu.hidden {
+  display: none;
+}
+
+
+#settings-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 5;
+}
+
+.settings-content {
+  background: #1e1e1e;
+  color: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  width: 300px;
+  max-width: 80%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  text-align: center;
+
+  font-family: 'Roboto', sans-serif;
+}
+
+.settings-content h2 {
+  margin-top: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+}
+
+.settings-content label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  font-size: 1rem;
+}
+
+.settings-content h3 {
+  text-align: left;
+  margin-bottom: 0;
+  font-size: 1.2rem;
+}
+
+#close-settings {
+  margin-top: 20px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #444;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#close-settings:hover {
+  background: #505050;
+}
+
 /* Game Container */
 #game-container {
   position: absolute;
-  left: 11%;
+  left: 20%;
   display: grid;
+  grid-template-rows: auto 738px auto;
   grid-template-columns: auto 738px auto;
-  align-items: center;
   gap: 60px;
 }
 
@@ -64,18 +141,40 @@ main {
 
 /* Text Box */
 #text-box {
-  grid-column: 1;
-  justify-self: end;
+  grid-row: 2;
+  grid-column: 3;
   position: relative;
+  background-color: #0a106817;
+  border: 2px solid #0a0a0a6b;
+  border-radius: 30px;
+  justify-self: center;
+  align-self: start;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 360px;
+  width: 20vw;
+  height: 738px;
   gap: 30px;
 }
 
+#text-box-header {
+  grid-row: 1;
+  grid-column: 1 / -1;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* divider line */
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+}
+
 #turn-announcer {
+  justify-self: center;
+  grid-row: 1;
+  grid-column: 1 / span 2;
   font-size: 2.2rem;
   font-family: 'Orbitron', sans-serif;
   text-align: center;
@@ -87,10 +186,36 @@ main {
 }
 
 #red-turn-text {
-  color: rgb(255, 0, 0);
+  color: red;
+}
+
+#settings-cog {
+  grid-row: 1;
+  grid-column: 1;
+  justify-self: start;
+  align-self: start;
+  width: 25px;
+  height: 25px;
+  background-image: url("../../imgs/misc/settings-cog.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: none;
+  background-color: #f5f5f500;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+#settings-cog:hover {
+  transform: scale(1.1);
+}
+
+#settings-cog:active {
+  transform: scale(0.95);
 }
 
 #instruction {
+  justify-self: flex-start;
+  align-self: flex-start;
   width: 100%;
   height: 120px;
   border-radius: 12px;
@@ -108,8 +233,10 @@ main {
 
 /* Dice */
 #dice-container {
-  grid-column: 3;
-  justify-self: start;
+  grid-row: 2;
+  grid-column: 1;
+  align-self: center;
+  justify-self: center;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -147,6 +274,7 @@ main {
 
 /* Game Board */
 #board {
+  grid-row: 2;
   grid-column: 2;
   justify-self: center;
   position: relative;
@@ -287,4 +415,10 @@ img[id^="b"] {
 
 .tile.Bank {
   background-color: #facc15;
+}
+
+@media screen and (max-width: 600px){
+  #text-box {
+    display: none;
+  }
 }
