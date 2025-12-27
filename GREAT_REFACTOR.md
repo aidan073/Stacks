@@ -251,9 +251,9 @@ Transform Stacks into a modern, scalable web game with:
 
 | Phase | Branches | Duration Estimate | Description |
 |-------|----------|-------------------|-------------|
-| **1** | `react-migration` | 3-4 weeks (Dec 27 - January 23) | Foundation - get React working with existing game |
+| **1** | `lambda-backend` + `dynamodb-integration` | 3-4 weeks (Dec 27 - January 23) | Build the serverless backend |
 | **2** | `visual-overhaul` | 2-3 weeks (January 24 - February 14) | Overhaul UI-UX |
-| **3** | `lambda-backend` + `dynamodb-integration` | 3-4 weeks (February 15 - March 15) | Build the serverless backend |
+| **3** | `react-migration` | 3-4 weeks (February 15 - March 15) | Foundation - get React working with existing game |
 | **4** | `api-gateway` | 2 weeks (March 16 - March 30) | Wire up the API |
 | **5** | `frontend-api-integration` | 2-3 weeks (March 31 - April 21) | Connect frontend to backend |
 | **6** | `deployment` | 2 weeks (April 22 - May 6) | Finalize initial deployment |
