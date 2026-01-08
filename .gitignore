@@ -1,2 +1,6 @@
 imgs/
-src/todo.txt
+src/todo.txt\
+
+.vscode
+bin/
+obj/

@@ -1,0 +1,176 @@
+================================================================================
+                        STACKS - PLANNED PROJECT FOLDER STRUCTURE
+================================================================================
+
+Stacks/
+│
+├── frontend/                     # React + Vite + TypeScript application
+│   │
+│   ├── public/                   # Static assets served as-is by Vite
+│   │   └── images/               # Game images (pieces, dice, backdrops, logo)
+│   │
+│   ├── src/
+│   │   │
+│   │   ├── components/           # Reusable React components
+│   │   │   ├── board/            # Board-related components (game board, tiles, pieces)
+│   │   │   ├── dice/             # Dice display and rolling interaction components
+│   │   │   └── ui/               # General UI components (buttons, navbar, modals, settings)
+│   │   │
+│   │   ├── pages/                # Top-level route components (one per page/view)
+│   │   │   ├── home/             # Landing page
+│   │   │   ├── play/             # Game views (online multiplayer, vs computer)
+│   │   │   ├── lobby/            # Match creation, joining, and matchmaking
+│   │   │   └── auth/             # Login and registration views
+│   │   │
+│   │   ├── hooks/                # Custom React hooks (game state, auth, API calls)
+│   │   │
+│   │   ├── context/              # React context providers (auth context, game context)
+│   │   │
+│   │   ├── services/             # API client and external service integrations
+│   │   │
+│   │   ├── types/                # TypeScript type definitions and interfaces
+│   │   │                         # (game models, API responses, enums)
+│   │   │
+│   │   ├── utils/                # Helper functions and shared utilities
+│   │   │
+│   │   └── styles/               # Global styles, CSS variables, design tokens
+│   │
+│   └── [vite config, package.json, tsconfig, etc.]
+│
+│
+├── backend/                      # C# AWS Lambda serverless backend
+│   │
+│   ├── src/
+│   │   │
+│   │   ├── Handlers/             # Lambda function entry points
+│   │   │                         # (create game, make move, get state, auth handlers)
+│   │   │
+│   │   ├── Core/                 # Core game domain logic
+│   │   │   ├── Models/           # Domain models (Board, Piece, Move, Game, Player)
+│   │   │   ├── Services/         # Business logic services (move validation, 
+│   │   │   │                     #  turn enforcement, win condition checking)
+│   │   │   └── Enums/            # Game constants and enumerations
+│   │   │
+│   │   ├── Data/                 # Data access layer
+│   │   │   ├── Repositories/     # DynamoDB repository classes (Games, Users)
+│   │   │   └── Entities/         # Database entity models and serialization
+│   │   │
+│   │   ├── Auth/                 # Authentication logic (JWT, password hashing)
+│   │   │
+│   │   └── Common/               # Shared utilities, extensions, error handling
+│   │
+│   ├── tests/                    # Unit and integration tests for backend
+│   │
+│   └── infrastructure/           # AWS deployment configuration
+│       └── [CDK stacks for Lambda, API Gateway, DynamoDB]
+│
+│
+├── docs/                         # Project documentation
+│                                 # (architecture decisions, API specs, design system)
+│
+└── [root config files: README, .gitignore, etc.]
+
+
+================================================================================
+                           FOLDER DESCRIPTIONS
+================================================================================
+
+FRONTEND
+--------
+The frontend folder contains everything for the React single-page application,
+built and bundled using Vite.
+
+• public/images/
+  All game visual assets - piece sprites for both team colors, dice face 
+  images, background artwork, and the Stacks logo.
+
+• src/components/
+  Modular, reusable UI building blocks. The board subfolder handles the 
+  visual game board, individual tiles, and piece rendering. The dice folder 
+  manages dice display and roll animations. The ui folder contains generic 
+  interface elements used across multiple pages.
+
+• src/pages/
+  Each subfolder represents a distinct route/view in the app. These are 
+  container components that compose smaller components into full pages.
+
+• src/hooks/
+  Custom hooks that encapsulate reusable logic - managing game state 
+  subscriptions, handling authentication flows, wrapping API calls with 
+  loading/error states.
+
+• src/context/
+  React Context providers for global state that needs to be accessed 
+  across many components (current user, active game session, theme).
+
+• src/services/
+  The API client layer - functions that communicate with the backend, 
+  handle request/response formatting, and manage authentication tokens.
+
+• src/types/
+  TypeScript interfaces and type definitions shared across the app - 
+  game state shapes, piece types, API payloads, etc.
+
+• src/utils/
+  Pure helper functions - coordinate calculations, formatting, 
+  validation helpers that don't fit elsewhere.
+
+• src/styles/
+  Global CSS, design system tokens (colors, spacing, typography), 
+  and any shared style utilities.
+
+
+BACKEND
+-------
+The backend folder contains the C# serverless application deployed to AWS Lambda.
+
+• src/Handlers/
+  AWS Lambda function entry points. Each handler receives API Gateway events,
+  delegates to services, and returns HTTP responses. Kept thin - just 
+  request parsing and response formatting.
+
+• src/Core/Models/
+  The domain model classes representing game concepts - the board structure,
+  piece definitions, player information, move representations.
+
+• src/Core/Services/
+  Business logic that enforces game rules - validating that moves are legal,
+  checking whose turn it is, detecting victory conditions, rolling dice.
+
+• src/Core/Enums/
+  Constants and enumerations - piece types, game phases, player colors, 
+  tile states.
+
+• src/Data/Repositories/
+  Data access classes that read/write to DynamoDB. Abstracts away the 
+  database SDK, handles serialization, provides clean interfaces for 
+  storing and retrieving games and users.
+
+• src/Data/Entities/
+  Database-specific representations of data - may differ from domain 
+  models to optimize for DynamoDB's structure.
+
+• src/Auth/
+  Authentication concerns - verifying credentials, generating and 
+  validating JWT tokens, password hashing.
+
+• src/Common/
+  Cross-cutting utilities - custom exceptions, response helpers, 
+  extension methods, logging setup.
+
+• tests/
+  Unit tests for game logic, integration tests for data access, 
+  and handler tests using mocked dependencies.
+
+• infrastructure/
+  AWS SAM templates or CDK stacks that define the cloud resources - 
+  Lambda functions, API Gateway routes, DynamoDB tables, IAM roles.
+
+
+DOCS
+----
+Project-level documentation - architectural diagrams, API endpoint 
+specifications, design system guidelines, and development setup guides.
+
+================================================================================
+

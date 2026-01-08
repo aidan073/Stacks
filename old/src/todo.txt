@@ -1,0 +1,11 @@
+1. pieces.js:
+SHOULDN'T BE ABLE TO TAKE PIECE IN SPAWN
+
+2.
+Double clicking near bottom right of board causes 6 die to highlight.
+
+3.
+When two of your pieces are on top of each other, both pieces are probably gonna move.
+
+4.
+The CSS is pretty awful for the game-container. Left of the game-container is set to 11%, but if window gets small this pushes past the navbar.
