@@ -4,3 +4,5 @@ src/todo.txt\
 .vscode
 bin/
 obj/
+
+*.sln
