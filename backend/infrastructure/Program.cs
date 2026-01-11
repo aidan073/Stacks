@@ -1,2 +1,16 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Amazon.CDK;
+
+namespace Infrastructure.Stacks;
+
+sealed class Program
+{
+    public static void Main(string[] args)
+    {
+        var app = new App();
+        new ApiStack(app, "ApiStack", new StackProps
+        {
+
+        });
+        app.Synth();
+    }
+}

@@ -1,12 +1,11 @@
-using Amazon.CDK;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
 
-namespace Handlers.WebSocket;
+namespace Handlers.WebSocket.Gameplay;
 
-public class WebSocketConnect
+public class GameplayWebSocketConnect
 {
-    public APIGatewayProxyResponse ConnectHandler(APIGatewayProxyRequest request, ILambdaContext context)
+    public APIGatewayProxyResponse GameplayWebSocketConnectHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {
         return new APIGatewayProxyResponse
         {

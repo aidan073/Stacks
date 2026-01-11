@@ -15,33 +15,46 @@ public class ApiStack : Stack
         Handler = $"backend::Handlers.WebSocket.WebSocketConnect::{funcName}",
         Code = Code.FromAsset("../src/bin/Debug/net9.0")
     };
-    // TODO: Come up with a more structured naming scheme
     public ApiStack(Construct scope, string id, StackProps props)
         : base(scope, id, props)
     {
-        // Gameplay WebSocket
-        WebSocketApi webSocketApi = new WebSocketApi(this, "GameplayWebSocketApi");
+        // ==== Gameplay WebSocket and EndPoints ====
+        WebSocketApi gameplayWebSocketApi = new WebSocketApi(this, "GameplayWebSocketApi");
 
         new WebSocketStage(this, "GameplayDevStage", new WebSocketStageProps
         {
-            WebSocketApi = webSocketApi,
+            WebSocketApi = gameplayWebSocketApi,
             StageName = "dev",
             AutoDeploy = true
         });
 
         new CfnOutput(this, "GameplayWebSocketApiId", new CfnOutputProps
         {
-            Value = webSocketApi.ApiId
+            Value = gameplayWebSocketApi.ApiId
         });
         new CfnOutput(this, "GameplayWebSocketApiEndpoint", new CfnOutputProps
         {
-            Value = webSocketApi.ApiEndpoint
+            Value = gameplayWebSocketApi.ApiEndpoint
         });
 
-        var connectionHandler = new Function(this, "GameplayConnectionHandlerLambda", SharedLambdaProps("ConnectHandler"));
+        var gameplayWebSocketConnectHandler = new Function(this, "GameplayWebSocketConnectLambda", SharedLambdaProps("GameplayWebSocketConnectHandler"));
+        gameplayWebSocketApi.AddRoute("$connect", new WebSocketRouteProps
+        {
+            Integration = new WebSocketLambdaIntegration("GameplayWebSocketConnectIntegration", gameplayWebSocketConnectHandler)
+        });
 
-        webSocketApi.AddRoute("$connect", new WebSocketRouteProps {
-                Integration = new WebSocketLambdaIntegration("GameplayConnectIntegration", connectionHandler)
-            });
-        }
+        var gameplayWebSocketDisconnectHandler = new Function(this, "GameplayWebSocketDisconnectLambda", SharedLambdaProps("GameplayWebSocketDisconnectHandler"));
+        gameplayWebSocketApi.AddRoute("$disconnect", new WebSocketRouteProps
+        {
+            Integration = new WebSocketLambdaIntegration("GameplayWebSocketDisconnectIntegration", gameplayWebSocketDisconnectHandler)
+        });
+
+        var gameplayWebSocketDefaultHandler = new Function(this, "GameplayWebSocketDefaultLambda", SharedLambdaProps("GameplayWebSocketDefaultHandler"));
+        gameplayWebSocketApi.AddRoute("$default", new WebSocketRouteProps
+        {
+            Integration = new WebSocketLambdaIntegration("GameplayWebSocketDefaultIntegration", gameplayWebSocketDefaultHandler)
+        });
+
+        // ====   ====
+    }
 }
